@@ -1,0 +1,17 @@
+general:
+  asset: 1
+  tfmin: 60
+  performance_stat: sharpe
+  datapath: ./master/data-wip
+  raw_data: master/data-raw/data_unseen_20191001_20210920.csv
+
+
+strategy:
+  param.path: master//rcode//logic/strategy_param.yaml
+
+wf:
+  param.path: master//rcode//logic/WfHelper.yaml
+  train_length: 7
+  test_length: 28
+  day_clip_front: 37
+  day_clip_back: 30

@@ -1,0 +1,17 @@
+main_project: c:\\todo-p\\UW\\Master-Thesis
+
+dvc_path : c:\\Users\\mrozoo\\Anaconda3\\envs\\repro\\Scripts
+
+copy_path: c:\\todo-p\\UW\\Master-Thesis-analysis\\data\\3mln_9month\data\
+
+file_to_collect:     
+    - dfresult.yaml
+    - params.yaml
+    - master\data-wip\%s\%s\07_wf_metrics.rds
+
+experiment_csv: data\20231216_22_months\20231216_22_months.csv
+
+experiment_col: Experiment 
+
+command_to_execute:
+    - dvc exp apply %s

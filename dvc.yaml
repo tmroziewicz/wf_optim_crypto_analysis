@@ -1,0 +1,289 @@
+params:
+    - params.yaml
+stages:  
+  01_generate_heatmap:
+    cmd: rscript ${01_generate_heatmap.script}  --inputfile  ${01_generate_heatmap.input} --output ${01_generate_heatmap.output}  --helper ${01_generate_heatmap.helper}  --funs ${01_generate_heatmap.funs[0]},${01_generate_heatmap.funs[1]},${01_generate_heatmap.funs[2]} --args ${01_generate_heatmap.args[0]} 
+    deps:
+    - ${01_generate_heatmap.input}
+    - ${01_generate_heatmap.script}    
+    outs:
+    - ${01_generate_heatmap.output}    
+    params:
+    - 01_generate_heatmap
+    - general
+
+  02_smooth_heatmap:
+    cmd: rscript ${02_smooth_heatmap.script}  --inputfile  ${02_smooth_heatmap.input} --output ${02_smooth_heatmap.output}  --helper ${02_smooth_heatmap.helper}  --funs ${02_smooth_heatmap.funs[0]},${02_smooth_heatmap.funs[1]},${02_smooth_heatmap.funs[2]}  --args ${02_smooth_heatmap.args[0]}
+    deps:
+    - ${02_smooth_heatmap.input}
+    - ${02_smooth_heatmap.script}    
+    outs:
+    - ${02_smooth_heatmap.output}    
+    params:
+    - 02_smooth_heatmap
+    - general
+    
+  03_mean_per_tf:
+    cmd: rscript ${03_mean_per_tf.script}  --inputfile  ${03_mean_per_tf.input} --output ${03_mean_per_tf.output}  --helper ${03_mean_per_tf.helper}  --funs ${03_mean_per_tf.funs[0]},${03_mean_per_tf.funs[1]},${03_mean_per_tf.funs[2]}  --args ${03_mean_per_tf.args[0]} 
+    deps:
+    - ${03_mean_per_tf.input}
+    - ${03_mean_per_tf.script}    
+    outs:
+    - ${03_mean_per_tf.output}    
+    params:
+    - 03_mean_per_tf
+    - general
+    
+  04_basic_stats_per_tf:
+    cmd: rscript ${04_basic_stats_per_tf.script}  --inputfile  ${04_basic_stats_per_tf.input} --output ${04_basic_stats_per_tf.output}  --helper ${04_basic_stats_per_tf.helper}  --funs ${04_basic_stats_per_tf.funs[0]},${04_basic_stats_per_tf.funs[1]},${04_basic_stats_per_tf.funs[2]}  --args ${04_basic_stats_per_tf.args[0]} 
+    deps:
+    - ${04_basic_stats_per_tf.input}
+    - ${04_basic_stats_per_tf.script}    
+    - ${general.analyse_helper}
+    outs:
+    - ${04_basic_stats_per_tf.output}    
+    params:
+    - 04_basic_stats_per_tf
+    - general
+    
+  05_trading_stats_per_tf:
+    cmd: rscript ${05_trading_stats_per_tf.script}  --inputfile  ${05_trading_stats_per_tf.input} --output ${05_trading_stats_per_tf.output}  --helper ${05_trading_stats_per_tf.helper}  --funs ${05_trading_stats_per_tf.funs[0]},${05_trading_stats_per_tf.funs[1]},${05_trading_stats_per_tf.funs[2]}  --args ${05_trading_stats_per_tf.args[0]} 
+    deps:
+    - ${04_basic_stats_per_tf.input}
+    - ${04_basic_stats_per_tf.script}    
+    - ${general.analyse_helper}
+    outs:
+    - ${05_trading_stats_per_tf.output}    
+    params:
+    - 05_trading_stats_per_tf
+    - 04_basic_stats_per_tf
+    - general
+  
+  06_00_equity_curve_strategy_asset:
+    foreach: ${06_00_equity_curve_strategy_asset.dataset}
+    do: 
+      cmd: rscript ${06_00_equity_curve_strategy_asset.script}  --inputfile  ${item.input} --output ${item.output}  --helper ${06_00_equity_curve_strategy_asset.helper}  --funs ${06_00_equity_curve_strategy_asset.funs[0]},${06_00_equity_curve_strategy_asset.funs[1]},${06_00_equity_curve_strategy_asset.funs[2]}  --args ${item.arg} 
+      outs: 
+        - ${item.output}
+      deps:
+        - ${item.input}
+        - ${general.analyse_helper}
+      params:
+        - 07_00_strategy_stats
+      
+  
+  06_merge_equity_curves:
+    cmd: rscript ${06_merge_equity_curves.script}  --inputfile  ${06_merge_equity_curves.input} --output ${06_merge_equity_curves.output}  --helper ${06_merge_equity_curves.helper}  --funs ${06_merge_equity_curves.funs[0]},${06_merge_equity_curves.funs[1]},${06_merge_equity_curves.funs[2]}  --args ${06_merge_equity_curves.args[0]} 
+    deps:
+    - ${06_merge_equity_curves.input}
+    - ${06_merge_equity_curves.script}    
+    - ${general.analyse_helper}
+    outs:
+    - ${06_merge_equity_curves.output}    
+    params:
+    - 06_merge_equity_curves
+    - 04_basic_stats_per_tf
+    - general   
+
+
+  07_00_strategy_stats:
+    foreach: ${07_00_strategy_stats.dataset}
+    do: 
+      cmd: rscript ${07_00_strategy_stats.script}  --inputfile  ${item.data} --output ${item.output}  --helper ${07_00_strategy_stats.helper}  --funs ${07_00_strategy_stats.funs[0]},${07_00_strategy_stats.funs[1]},${07_00_strategy_stats.funs[2]}  --args ${item.arg} 
+      outs: 
+        - ${item.output}
+      deps:
+        - ${item.data}
+        - ${general.analyse_helper}
+      params:
+        - 07_00_strategy_stats
+      
+      
+  
+    
+  07_merge_strategy_stats:
+    cmd: rscript ${07_merge_strategy_stats.script}  --inputfile  ${07_merge_strategy_stats.input} --output ${07_merge_strategy_stats.output}  --helper ${07_merge_strategy_stats.helper}  --funs ${07_merge_strategy_stats.funs[0]},${07_merge_strategy_stats.funs[1]},${07_merge_strategy_stats.funs[2]}  --args ${07_merge_strategy_stats.args[0]} 
+    deps:
+    - ${07_merge_strategy_stats.input}
+    - ${07_merge_strategy_stats.script}    
+    - ${general.analyse_helper}
+    outs:
+    - ${07_merge_strategy_stats.output}    
+    params:
+    - 07_merge_strategy_stats
+    - 04_basic_stats_per_tf
+    - general   
+      
+
+  08_bootstrap_position:
+    foreach: ${08_bootstrap_position.dataset}
+    do: 
+      cmd: rscript ${08_bootstrap_position.script}  --inputfile  ${item.input} --output ${item.output}  --helper ${08_bootstrap_position.helper}  --funs ${08_bootstrap_position.funs[0]},${08_bootstrap_position.funs[1]},${08_bootstrap_position.funs[2]}  --args ${item.arg[0]}#${08_bootstrap_position.args[0]}
+      outs: 
+        - ${item.output}
+      deps:
+        - ${item.input}
+        - ${general.bootstrap_helper}
+      params:
+        - 08_bootstrap_position
+
+  09_bootstrap_ma:
+    foreach: ${09_bootstrap_ma.dataset}
+    do: 
+      cmd: rscript ${09_bootstrap_ma.script}  --inputfile  ${item.input} --output ${item.output}  --helper ${09_bootstrap_ma.helper}  --funs ${09_bootstrap_ma.funs[0]},${09_bootstrap_ma.funs[1]},${09_bootstrap_ma.funs[2]}  --args ${item.arg[0]}#${item.arg[1]}#${09_bootstrap_ma.args[0]}
+      outs: 
+        - ${item.output}
+      deps:
+        - ${item.input}
+        - ${general.bootstrap_helper}
+      params:
+        - 09_bootstrap_ma
+
+  09_calculate_significance:
+    foreach: ${09_calculate_significance.dataset}
+    do: 
+      cmd: rscript ${09_calculate_significance.script}  --inputfile  ${item.input} --output ${item.output}  --helper ${09_calculate_significance.helper}  --funs ${09_calculate_significance.funs[0]},${09_calculate_significance.funs[1]},${09_calculate_significance.funs[2]}  --args ${item.arg[0]}
+      outs: 
+        - ${item.output}
+      deps:
+        - ${item.input}
+        - ${general.bootstrap_helper}
+      params:
+        - 09_bootstrap_ma
+    
+  10_seasonality:
+    foreach: ${10_seasonality.dataset}
+    do: 
+      cmd: rscript ${10_seasonality.script}  --inputfile  ${item.input} --output ${item.output}  --helper ${10_seasonality.helper}  --funs ${10_seasonality.funs[0]},${10_seasonality.funs[1]},${10_seasonality.funs[2]},${10_seasonality.funs[3]},${item.fun},${10_seasonality.funs[5]} --args ${10_seasonality.args[0]},${item.arg[0]}
+      outs: 
+        - ${item.output}
+      deps:
+        - ${item.input}
+        - ${general.bootstrap_helper}
+      params:
+        - 09_bootstrap_ma
+
+  11_unseen_data_equity_curve:
+    foreach: ${11_unseen_data_equity_curve.dataset}
+    do: 
+      cmd: rscript ${11_unseen_data_equity_curve.script}  --inputfile  ${item.input} --output ${item.output}  --helper ${11_unseen_data_equity_curve.helper}  --funs ${11_unseen_data_equity_curve.funs[0]},${11_unseen_data_equity_curve.funs[1]},${11_unseen_data_equity_curve.funs[2]}  --args ${item.arg} 
+      outs: 
+        - ${item.output}
+      deps:
+        - ${item.input}
+        - ${general.analyse_helper}
+      params:
+        - 11_unseen_data_equity_curve
+
+
+  12_unseen_data_strategy_stats:
+    foreach: ${12_unseen_data_strategy_stats.dataset}
+    do: 
+      cmd: rscript ${12_unseen_data_strategy_stats.script}  --inputfile  ${item.input} --output ${item.output}  --helper ${12_unseen_data_strategy_stats.helper}  --funs ${12_unseen_data_strategy_stats.funs[0]},${12_unseen_data_strategy_stats.funs[1]},${12_unseen_data_strategy_stats.funs[2]}  --args ${item.arg} 
+      outs: 
+        - ${item.output}
+      deps:
+        - ${item.input}
+        - ${general.analyse_helper}
+      params:
+        - 12_unseen_data_strategy_stats
+
+  12_unseen_merge_strategy_stats:
+    cmd: rscript ${12_unseen_merge_strategy_stats.script}  --inputfile  ${12_unseen_merge_strategy_stats.input} --output ${12_unseen_merge_strategy_stats.output}  --helper ${12_unseen_merge_strategy_stats.helper}  --funs ${12_unseen_merge_strategy_stats.funs[0]},${12_unseen_merge_strategy_stats.funs[1]},${12_unseen_merge_strategy_stats.funs[2]}  --args ${12_unseen_merge_strategy_stats.args[0]};${12_unseen_merge_strategy_stats.args[1]};${12_unseen_merge_strategy_stats.args[2]};${12_unseen_merge_strategy_stats.args[3]};${12_unseen_merge_strategy_stats.args[4]};${12_unseen_merge_strategy_stats.args[5]};${12_unseen_merge_strategy_stats.args[6]};${12_unseen_merge_strategy_stats.args[7]}
+    deps:
+    - ${12_unseen_merge_strategy_stats.input}
+    - ${12_unseen_merge_strategy_stats.script}    
+    - ${general.analyse_helper}
+    outs:
+    - ${12_unseen_merge_strategy_stats.output}    
+    params:
+    - 12_unseen_merge_strategy_stats
+    - 04_basic_stats_per_tf
+    - general   
+
+
+  13_01_merge_returns:
+    foreach: ${13_01_merge_returns.dataset}
+    do:
+      cmd: rscript ${13_01_merge_returns.script}  --inputfile  ${item.input} --output ${item.output}  --helper ${13_01_merge_returns.helper}  --funs ${13_01_merge_returns.funs[0]},${13_01_merge_returns.funs[1]},${13_01_merge_returns.funs[2]}  --args ${item.arg[0]};${item.arg[1]}
+      deps:    
+      - ${13_01_merge_returns.script}    
+      - ${general.analyse_helper}
+      outs:
+      - ${item.output}    
+      params:
+      - 13_01_merge_returns    
+      - 11_unseen_data_equity_curve
+      
+
+  13_02_portfolio_calculate:
+    foreach: ${13_02_portfolio_calculate.dataset}
+    do:
+      cmd: rscript ${13_02_portfolio_calculate.script}  --inputfile  ${item.input} --output ${item.output}  --helper ${13_02_portfolio_calculate.helper}  --funs ${13_02_portfolio_calculate.funs[0]},${13_02_portfolio_calculate.funs[1]},${13_02_portfolio_calculate.funs[2]}   --args ${item.arg}
+      deps:
+      - ${13_02_portfolio_calculate.input}
+      - ${13_02_portfolio_calculate.script}    
+      - ${general.analyse_helper}
+      outs:
+      - ${item.output}    
+      params:
+      - 13_02_portfolio_calculate
+      - 04_basic_stats_per_tf
+      - general   
+  
+  13_03_portfolio_of_portfolio:
+    cmd: rscript ${13_03_portfolio_of_portfolio.script}  --inputfile  ${13_03_portfolio_of_portfolio.input} --output ${13_03_portfolio_of_portfolio.output}  --helper ${13_03_portfolio_of_portfolio.helper}  --funs ${13_03_portfolio_of_portfolio.funs[0]},${13_03_portfolio_of_portfolio.funs[1]},${13_03_portfolio_of_portfolio.funs[2]}  --args ${13_03_portfolio_of_portfolio.args[0]};${13_03_portfolio_of_portfolio.args[1]}
+    deps:
+    - ${13_03_portfolio_of_portfolio.input}
+    - ${13_03_portfolio_of_portfolio.script}    
+    - ${general.analyse_helper}
+    outs:
+    - ${13_03_portfolio_of_portfolio.output}    
+    params:
+    - 13_03_portfolio_of_portfolio
+    - 04_basic_stats_per_tf
+    - general   
+
+
+  14_unseen_portfolio_stats:
+    foreach: ${14_unseen_portfolio_stats.dataset}
+    do: 
+      cmd: rscript ${14_unseen_portfolio_stats.script}  --inputfile  ${item.input} --output ${item.output}  --helper ${14_unseen_portfolio_stats.helper}  --funs ${14_unseen_portfolio_stats.funs[0]},${14_unseen_portfolio_stats.funs[1]},${14_unseen_portfolio_stats.funs[2]},${14_unseen_portfolio_stats.funs[3]} --args noarg,${item.arg} 
+      deps:
+      - ${item.input}
+      - ${14_unseen_portfolio_stats.script}    
+      - ${general.analyse_helper}
+      outs:
+      - ${item.output}    
+      params:
+      - 14_unseen_portfolio_stats
+      - 04_basic_stats_per_tf
+      - general   
+
+  15_cost_sensitivity:
+    foreach: ${15_cost_sensitivity.dataset}
+    do: 
+      cmd: rscript ${15_cost_sensitivity.script}  --inputfile  ${item.input} --output ${item.output}  --helper ${15_cost_sensitivity.helper}  --funs ${15_cost_sensitivity.funs[0]},${15_cost_sensitivity.funs[1]},${15_cost_sensitivity.funs[2]},${15_cost_sensitivity.funs[3]} --args noarg,${item.arg} 
+      deps:
+      - ${item.input}
+      - ${15_cost_sensitivity.script}    
+      - ${general.analyse_helper}
+      outs:
+      - ${item.output}    
+      params:
+      - 15_cost_sensitivity
+      - 04_basic_stats_per_tf
+      - general   
+
+  15_01_trading_stats_cost_sens:
+    cmd: rscript ${15_01_trading_stats_cost_sens.script}  --inputfile  ${15_01_trading_stats_cost_sens.input} --output ${15_01_trading_stats_cost_sens.output}  --helper ${15_01_trading_stats_cost_sens.helper}  --funs ${15_01_trading_stats_cost_sens.funs[0]},${15_01_trading_stats_cost_sens.funs[1]},${15_01_trading_stats_cost_sens.funs[2]}  --args ${15_01_trading_stats_cost_sens.args[0]} 
+    deps:
+    - ${15_01_trading_stats_cost_sens.input}
+    - ${15_01_trading_stats_cost_sens.script}    
+    - ${general.analyse_helper}
+    outs:
+    - ${15_01_trading_stats_cost_sens.output}    
+    params:
+    - 15_01_trading_stats_cost_sens    
+    - general   
+

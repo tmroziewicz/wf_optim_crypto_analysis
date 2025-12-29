@@ -1,0 +1,508 @@
+general:
+  analyse_helper: dvc_pipeline/logic/analyse_helper.r
+  bootstrap_helper:         &bootstrap_helper dvc_pipeline/logic/bootstrap_helper.r
+  seasonality_helper:         &seasonality_helper dvc_pipeline/logic/seasonality_helper.r
+  
+  train_strat_1_raw:        &train_strat_1_raw          data\20231216_22_months\data\crash-taka\01_converted_to_xts.rds
+  train_strat_1_result:     &train_strat_1_result       data\20231216_22_months\data\crash-taka\09_wf_test_evalued.rds
+  train_strat_1_metric:     &train_strat_1_metric       data\20231216_22_months\data\crash-taka\metrics.yaml
+  train_strat_1_positions:  &train_strat_1_positions    data\20231216_22_months\data\crash-taka\04_positions.rds
+  train_strat_1_wf_indexes: &train_strat_1_wf_indexes   data\20231216_22_months\data\crash-taka\06_wf_indexes.rds
+  train_strat_2_result:     &train_strat_2_result       data\20231216_22_months\data\liney-jass\09_wf_test_evalued.rds
+  train_strat_2_metric:     &train_strat_2_metric       data\20231216_22_months\data\liney-jass\metrics.yaml
+  train_strat_2_positions:  &train_strat_2_positions    data\20231216_22_months\data\crash-taka\04_positions.rds  
+  train_strat_2_wf_indexes: &train_strat_2_wf_indexes   data\20231216_22_months\data\liney-jass\06_wf_indexes.rds
+  
+  train_strat_1_cost_sens: &train_strat_1_cost_sens   data_to_share\15_cost_sensitivitiy.rds
+  train_strat_1_cost_sens_stats: &train_strat_1_cost_sens_stats   data_to_share\15_cost_sensitivitiy_stats.rds
+
+#unseen variable
+  unseen_strat_1_result:  &unseen_strat_1_result     data\20240105_unseen\data\TRAIN_7_TEST_28_BTC_ochre-expo\09_wf_test_evalued.rds
+  unseen_strat_2_result:  &unseen_strat_2_result     data\20240105_unseen\data\TRAIN_14_TEST_10_BTC_incog-caps\09_wf_test_evalued.rds 
+  unseen_strat_3_result:  &unseen_strat_3_result     data\20240105_unseen\data\TRAIN_7_TEST_28_ETH_crack-torc\09_wf_test_evalued.rds
+  unseen_strat_4_result:  &unseen_strat_4_result     data\20240105_unseen\data\TRAIN_14_TEST_10_ETH_blear-taco\09_wf_test_evalued.rds
+  unseen_strat_5_result:  &unseen_strat_5_result     data\20240105_unseen\data\TRAIN_7_TEST_28_BNB_telic-ions\09_wf_test_evalued.rds
+  unseen_strat_6_result:  &unseen_strat_6_result     data\20240105_unseen\data\TRAIN_14_TEST_10_BNB_varus-puck\09_wf_test_evalued.rds
+
+
+
+  unseen_strat_1_metric:  &unseen_strat_1_metric     data\20240105_unseen\data\TRAIN_7_TEST_28_BTC_ochre-expo\metrics.yaml
+  unseen_strat_2_metric:  &unseen_strat_2_metric     data\20240105_unseen\data\TRAIN_14_TEST_10_BTC_incog-caps\metrics.yaml 
+  unseen_strat_3_metric:  &unseen_strat_3_metric     data\20240105_unseen\data\TRAIN_7_TEST_28_ETH_crack-torc\metrics.yaml
+  unseen_strat_4_metric:  &unseen_strat_4_metric     data\20240105_unseen\data\TRAIN_14_TEST_10_ETH_blear-taco\metrics.yaml
+  unseen_strat_5_metric:  &unseen_strat_5_metric     data\20240105_unseen\data\TRAIN_7_TEST_28_BNB_telic-ions\metrics.yaml
+  unseen_strat_6_metric:  &unseen_strat_6_metric     data\20240105_unseen\data\TRAIN_14_TEST_10_BNB_varus-puck\metrics.yaml
+
+  unseen_strat_1_eq_curve: &unseen_strat_1_eq_curve     data_to_share\11_01_BTC_7_28_equity_curve_xts.rds
+  unseen_strat_2_eq_curve: &unseen_strat_2_eq_curve     data_to_share\11_02_BTC_14_10_equity_curve_xts.rds
+  unseen_strat_3_eq_curve: &unseen_strat_3_eq_curve     data_to_share\11_03_ETH_7_28_equity_curve_xts.rds
+  unseen_strat_4_eq_curve: &unseen_strat_4_eq_curve     data_to_share\11_04_ETH_14_10_equity_curve_xts.rds
+  unseen_strat_5_eq_curve: &unseen_strat_5_eq_curve     data_to_share\11_05_BNB_7_28_equity_curve_xts.rds
+  unseen_strat_6_eq_curve: &unseen_strat_6_eq_curve     data_to_share\11_06_BNB_14_10_equity_curve_xts.rds
+
+
+  unseen_strat_1_stats: &unseen_strat_1_stats     data_to_share\11_01_BTC_7_28_stats_xts.rds
+  unseen_strat_2_stats: &unseen_strat_2_stats     data_to_share\11_02_BTC_14_10_stats_xts.rds
+  unseen_strat_3_stats: &unseen_strat_3_stats     data_to_share\11_03_ETH_7_28_stats_xts.rds
+  unseen_strat_4_stats: &unseen_strat_4_stats     data_to_share\11_04_ETH_14_10_stats_xts.rds
+  unseen_strat_5_stats: &unseen_strat_5_stats     data_to_share\11_05_BTC_BH_stats_xts.rds
+  unseen_strat_6_stats: &unseen_strat_6_stats     data_to_share\11_06_ETH_BH_stats_xts.rds
+  unseen_strat_7_stats: &unseen_strat_7_stats     data_to_share\11_07_BNB_7_28_stats_xts.rds
+  unseen_strat_8_stats: &unseen_strat_8_stats     data_to_share\11_08_BNB_14_10_stats_xts.rds
+  unseen_strat_9_stats: &unseen_strat_9_stats     data_to_share\11_09_BNB_BH_stats_xts.rds
+
+  unseen_rets_7_28:     &unseen_rets_7_28                            data_to_share\13_01_merged_unseen_returns_7_28.rds
+  unseen_rets_14_10:    &unseen_rets_14_10                           data_to_share\13_01_merged_unseen_returns_14_10.rds
+
+  unseen_portfolio_7_28:     &unseen_portfolio_7_28                            data_to_share\13_01_merged_unseen_portfolio_7_28.rds
+  unseen_portfolio_14_10:    &unseen_portfolio_14_10                           data_to_share\13_01_merged_unseen_portfolio_14_10.rds
+  unseen_portfolio_combined: &unseen_portfolio_combined                        data_to_share\13_03_portfolio_combined.rds
+  unseen_portfolio_BH:       &unseen_portfolio_BH                              data_to_share\13_01_merged_unseen_portfolio_BH.rds
+
+
+  unseen_portfolio_7_28_stats:     &unseen_portfolio_7_28_stats                            data_to_share\14_01_merged_unseen_portfolio_7_28_stats.rds
+  unseen_portfolio_14_10_stats:    &unseen_portfolio_14_10_stats                           data_to_share\14_01_merged_unseen_portfolio_14_10_stats.rds
+  unseen_portfolio_combined_stats: &unseen_portfolio_combined_stats                        data_to_share\14_01_portfolio_combined_stats.rds
+  unseen_portfolio_BH_stats:       &unseen_portfolio_BH_stats                              data_to_share\14_01_merged_unseen_portfolio_BH_stats.rds
+
+
+
+01_generate_heatmap:
+  script: dvc_pipeline/function_caller.r
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs: 
+    - read.csv
+    - generate_heatmap
+    - saveRDS
+  args:
+    - noarg
+  input: data\20231216_22_months\20231216_22_months.csv
+  output: data_to_share\01_sharpe_heatmap.rds
+  
+02_smooth_heatmap:
+  script: dvc_pipeline/function_caller.r  
+  helper: smooth-matrix.R
+  funs:
+    - readRDS
+    - smooth_matrix
+    - saveRDS
+  args: 
+    - sharpe_ratio
+  input: data_to_share\01_sharpe_heatmap.rds
+  output: data_to_share\02_smoothed_heatmap.rds
+
+
+03_mean_per_tf:
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - read.csv
+    - get_mean_per_tf
+    - saveRDS
+  args: 
+    - noarg
+  input: data\3mln_9month\20231015_3mln_exp.csv
+  output: data_to_share\03_mean_sharpe_per_tf_df.rds
+
+04_basic_stats_per_tf:
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS
+    - get_basic_stats_per_tf
+    - saveRDS
+  args: 
+    - 1;5;10;15;30;60
+    
+  input:  *train_strat_1_raw
+  output: data_to_share\04_basic_asset_desc_tbl.rds
+
+
+05_trading_stats_per_tf:
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS
+    - get_trading_stats_per_tf
+    - saveRDS
+  args: 
+    - 30;60
+  input: data\8.7mln_1.5year\01_converted_to_xts.rds
+  output: data_to_share\05_trading_statistics_df.rds
+
+
+06_00_equity_curve_strategy_asset:
+  dataset:
+    - input: *train_strat_1_result
+      arg: *train_strat_2_metric
+      output: data_to_share\06_01_equity_curve_xts.rds
+    - input: *train_strat_2_result
+      arg: *train_strat_2_metric
+      output: data_to_share\06_02_equity_curve_xts.rds
+      
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS
+    - get_strategy_asset_returns_by_metrics
+    - saveRDS
+
+
+06_merge_equity_curves:
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/data_processing_helper.r
+  funs:
+    - as.character #way to pass the parameter withouth transofmration and calling initiali funciton 
+    - merge_files_cols_bind
+    - saveRDS
+  args:
+    - data_to_share\06_01_equity_curve_xts.rds
+  #input file path to the result of strategy, this should be retrieved from csv file ontaining experiment for given combinations 
+  input: data_to_share\06_02_equity_curve_xts.rds
+  output: data_to_share\06_merged_equity_curve_xts.rds
+
+
+
+07_00_strategy_stats:
+  dataset:
+    - data: data_to_share\06_01_equity_curve_xts.rds
+      arg: Strategy#"BTC Train 7 Test 28"#24*365
+      output: &07_01_strategy_stats_output    data_to_share\07_01_strategy_stats.rds
+    - data: data_to_share\06_02_equity_curve_xts.rds
+      arg: Strategy#"BTC Train 14 Test 10"#24*365
+      output: &07_02_strategy_stats_output data_to_share\07_02_strategy_stats.rds
+      
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS
+    - get_strategy_stats
+    - saveRDS
+
+
+07_merge_strategy_stats:
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/data_processing_helper.r
+  funs:
+    - as.character #way to pass the parameter withouth transofmration and calling initiali funciton 
+    - merge_files_rows_bind
+    - saveRDS
+  args:
+    - data_to_share\07_02_strategy_stats.rds
+  #input file path to the result of strategy, this should be retrieved from csv file ontaining experiment for given combinations 
+  input: data_to_share\07_01_strategy_stats.rds
+  output: data_to_share\07_merged_strategy_stats_xts.rds
+
+08_bootstrap_position:
+  dataset:
+    - input: *train_strat_1_result
+      arg: 
+        - *train_strat_1_metric
+      output: &09_bootstrap_pos_output_01 data_to_share\08_01_bootstrap_positions.rds
+    - input: *train_strat_2_result
+      arg: 
+        - *train_strat_2_metric
+      output: &09_bootstrap_pos_output_02 data_to_share\08_02_bootstrap_positions.rds
+
+  script: dvc_pipeline/function_caller.r  
+  helper: *bootstrap_helper  
+  args:
+    - 1000#365*24#3        #no_iter#freq#seed
+  funs:
+    - readRDS
+    - prepare_and_execute_position_bootstrap
+    - saveRDS
+
+09_bootstrap_ma:
+  dataset:
+    - input: *train_strat_1_positions
+      arg: 
+        - *train_strat_1_wf_indexes
+        - *train_strat_1_metric        
+      output: &09_bootstrap_ma_output_01 data_to_share\09_01_bootstrap_ma.rds
+    - input: *train_strat_2_positions
+      arg: 
+        - *train_strat_2_wf_indexes        
+        - *train_strat_2_metric                
+      output: &09_bootstrap_ma_output_02 data_to_share\09_02_bootstrap_ma.rds
+  script: dvc_pipeline/function_caller.r  
+  helper: *bootstrap_helper
+  args:
+    - 1000#365*24#3        #no_iter#freq#seed
+  funs:
+    - readRDS
+    - prepare_and_execute_ma_bootstrap
+    - saveRDS
+
+09_calculate_significance:
+  dataset:
+    - input: *09_bootstrap_ma_output_01
+      arg: 
+        - *07_01_strategy_stats_output                 
+      output: data_to_share\09_01_bootstrap_ma_significance.rds
+    - input: *09_bootstrap_ma_output_02
+      arg: 
+        - *07_02_strategy_stats_output                         
+      output: data_to_share\09_02_bootstrap_ma_significance.rds
+      
+    - input: *09_bootstrap_pos_output_01
+      arg: 
+        - *07_01_strategy_stats_output                 
+      output: data_to_share\09_01_bootstrap_pos_significance.rds
+    - input: *09_bootstrap_pos_output_02
+      arg: 
+        - *07_02_strategy_stats_output                         
+      output: data_to_share\09_02_bootstrap_pos_significance.rds
+      
+      
+  script: dvc_pipeline/function_caller.r  
+  helper: *bootstrap_helper
+  funs:
+    - readRDS
+    - calculate_significance
+    - saveRDS
+    
+
+10_seasonality:
+  dataset:
+    - input: *train_strat_1_result
+      fun: get_seasonality
+      arg:
+       - TRUE#FALSE#return
+      output: data_to_share\10_daily_seasonality.rds
+      
+    - input: *train_strat_1_result
+      fun: get_seasonality        
+      arg:
+       - FALSE#TRUE#return
+      output: data_to_share\10_hourly_seasonality.rds
+      
+    - input: *train_strat_1_result
+      fun: get_seasonality        
+      arg:
+       - TRUE#TRUE#return     
+      output: data_to_share\10_daily_hourly_seasonality.rds
+      
+  script: dvc_pipeline/function_caller.r  
+  helper: *seasonality_helper
+  args:
+    - return,noarg,noarg
+    
+  funs:
+     - readRDS
+     - subset_column
+     - add_day_hour_feature
+     - transform_to_df
+     - {placeholer_for_arg} #this will not be used in command insetad dynamic fun will be used here from dataset
+     - saveRDS
+   
+   
+11_unseen_data_equity_curve:
+  dataset:
+    - input: *unseen_strat_1_result
+      arg: *unseen_strat_1_metric
+      output: *unseen_strat_1_eq_curve
+    - input: *unseen_strat_2_result
+      arg: *unseen_strat_2_metric
+      output: *unseen_strat_2_eq_curve
+    - input: *unseen_strat_3_result
+      arg: *unseen_strat_3_metric
+      output: *unseen_strat_3_eq_curve
+    - input: *unseen_strat_4_result
+      arg: *unseen_strat_4_metric
+      output: *unseen_strat_4_eq_curve
+    - input: *unseen_strat_5_result
+      arg: *unseen_strat_5_metric
+      output: *unseen_strat_5_eq_curve
+    - input: *unseen_strat_6_result
+      arg: *unseen_strat_6_metric
+      output: *unseen_strat_6_eq_curve
+  
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS
+    - get_strategy_asset_returns_by_metrics
+    - saveRDS
+
+12_unseen_data_strategy_stats:
+  dataset:
+    - input: *unseen_strat_1_eq_curve
+      arg: Strategy#"BTC Train 7 Test 28"#24*365
+      output: *unseen_strat_1_stats
+    - input: *unseen_strat_2_eq_curve
+      arg: Strategy#"BTC Train 14 Test 10"#24*365
+      output: *unseen_strat_2_stats
+    - input: *unseen_strat_3_eq_curve
+      arg: Strategy#"ETH Train 7 Test 28"#24*365
+      output: *unseen_strat_3_stats
+    - input: *unseen_strat_4_eq_curve
+      arg: Strategy#"ETH Train 14 Test 10"#24*365
+      output: *unseen_strat_4_stats
+    - input: *unseen_strat_1_eq_curve
+      arg: Asset#"BTC Buy and Hold "#24*365
+      output: *unseen_strat_5_stats
+    - input: *unseen_strat_3_eq_curve
+      arg: Asset#"ETH Buy and Hold"#24*365
+      output: *unseen_strat_6_stats
+    - input: *unseen_strat_5_eq_curve
+      arg: Strategy#"BNB Train 7 Test 28"#24*365
+      output: *unseen_strat_7_stats
+    - input: *unseen_strat_6_eq_curve
+      arg: Strategy#"BNB Train 14 Test 10"#24*365
+      output: *unseen_strat_8_stats
+    - input: *unseen_strat_5_eq_curve
+      arg: Asset#"BNB Buy and Hold"#24*365
+      output: *unseen_strat_9_stats
+
+      
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS
+    - get_strategy_stats
+    - saveRDS
+
+12_unseen_merge_strategy_stats:
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/data_processing_helper.r
+  funs:
+    - as.character #way to pass the parameter withouth transofmration and calling initiali funciton 
+    - merge_files_rows_bind
+    - saveRDS
+  args:
+    - *unseen_strat_1_stats 
+    - *unseen_strat_2_stats
+    - *unseen_strat_6_stats
+    - *unseen_strat_3_stats
+    - *unseen_strat_4_stats
+    - *unseen_strat_9_stats
+    - *unseen_strat_7_stats
+    - *unseen_strat_8_stats
+    
+  #input file path to the result of strategy, this should be retrieved from csv file ontaining experiment for given combinations 
+  input: *unseen_strat_5_stats
+  output: data_to_share\12_unseen_merged_strategy_stats.rds
+
+13_01_merge_returns:
+  #strategy using train 7 test 28 day consisting 3 crypto
+  dataset:
+     - input: *unseen_strat_1_eq_curve
+       arg: 
+         - *unseen_strat_3_eq_curve
+         - *unseen_strat_5_eq_curve
+       output: *unseen_rets_7_28
+     - input: *unseen_strat_2_eq_curve
+       arg: 
+         - *unseen_strat_4_eq_curve
+         - *unseen_strat_6_eq_curve
+       output: *unseen_rets_14_10
+  
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/data_processing_helper.r
+  funs:
+    - as.character #way to pass the parameter withouth transofmration and calling initiali funciton 
+    - merge_files_cols_bind
+    - saveRDS    
+  
+
+
+
+13_02_portfolio_calculate:
+  dataset:
+     - input: *unseen_rets_7_28
+       arg: "Strategy"#"Portfolio_7_28"
+       output: *unseen_portfolio_7_28
+     - input: *unseen_rets_14_10
+       arg: "Strategy"#"Portfolio_14_10"         
+       output: *unseen_portfolio_14_10
+     - input: *unseen_rets_14_10
+       arg: "Asset"#"Portfolio_BH"         
+       output: *unseen_portfolio_BH
+
+
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS #way to pass the parameter withouth transofmration and calling initiali funciton 
+    - calculate_portfolio
+    - saveRDS  
+  args:
+    - noarg
+    
+  #input file path to the result of strategy, this should be retrieved from csv file ontaining experiment for given combinations 
+  input: *unseen_rets_7_28
+  output: data_to_share\13_02_portfolio_xts.rds
+
+
+13_03_portfolio_of_portfolio:
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS #way to pass the parameter withouth transofmration and calling initiali funciton 
+    - calculate_portfolio_of_portfolio
+    - saveRDS
+  args:
+    - *unseen_portfolio_7_28 
+    - *unseen_portfolio_14_10
+    
+  #input file path to the result of strategy, this should be retrieved from csv file ontaining experiment for given combinations 
+  input: *unseen_portfolio_BH
+  output: *unseen_portfolio_combined
+
+
+14_unseen_portfolio_stats:
+  dataset:
+     - input: *unseen_portfolio_7_28
+       arg: Portfolio#"Portfolio 3 currencies Train 7 Test 28"#24*365
+       output: *unseen_portfolio_7_28_stats
+     - input: *unseen_portfolio_14_10
+       arg: Portfolio#"Portfolio 3 currencies Train 14 Test 10"#24*365
+       output: *unseen_portfolio_14_10_stats
+     - input: *unseen_portfolio_BH
+       arg: Portfolio#"Portfolio 3 currencies Buy and Hold"#24*365
+       output: *unseen_portfolio_BH_stats
+     - input: *unseen_portfolio_combined
+       arg: Portfolio_Combined#"All Portfolios Combined"#24*365
+       output: *unseen_portfolio_combined_stats       
+
+      
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS
+    - getLogReturnsNoNA
+    - get_strategy_stats
+    - saveRDS
+
+
+15_cost_sensitivity: 
+  dataset:
+     - input: *train_strat_1_result
+       arg: *train_strat_1_metric
+       output: *train_strat_1_cost_sens
+      
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS
+    - get_cost_sensitivity_returns
+    - filter_data_by_metrics_dates
+    - saveRDS
+
+
+15_01_trading_stats_cost_sens:
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS    
+    - get_trading_stats_per_col
+    - saveRDS
+  args:
+    - 24*365
+  #input file path to the result of strategy, this should be retrieved from csv file ontaining experiment for given combinations 
+  input: *train_strat_1_cost_sens
+  output: *train_strat_1_cost_sens_stats
+
+  
+

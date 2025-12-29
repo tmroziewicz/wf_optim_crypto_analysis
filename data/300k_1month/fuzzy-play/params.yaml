@@ -1,0 +1,17 @@
+general:
+  timeframe:
+  - 1
+  - 10
+  - 15
+  asset: &asset '1'
+  tfmin: 10
+  performance_stat: calc_sharpe
+  datapath: ./master/data-wip
+
+strategy:
+  param.path: master//rcode//logic/strategy_param.yaml
+
+wf:
+  param.path: master//rcode//logic/WfHelper.yaml
+  train_length: 2
+  test_length: 3

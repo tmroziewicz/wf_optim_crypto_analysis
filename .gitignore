@@ -1,0 +1,4 @@
+*.rds
+.Rproj.user
+Master-Thesis-analysis.Rproj
+!data/*/*/*/*.rds
