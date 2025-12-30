@@ -1,6 +1,6 @@
-if (!require("pacman")) install.packages("pacman", repos = "http://cran.us.r-project.org")
-
-pacman::p_load(xts,yaml,optparse)
+library(xts)
+library(yaml)
+library(optparse)
 
 
 arg_parser <- function(input_args_str) {
@@ -87,11 +87,11 @@ f <- get(function_list[[1]])
 
 temp<- f(opt$input)
 #print(head(temp))
-
+print(args_list)
 for ( i in 2:(length(function_list)-1)) {
   print( paste("Executing function ", i,function_list[[i]] ))
   #$f <- get(function_list[[i]])
-  if( args_list[[i-1]][[1]]!="noarg"  ) {
+  if( args_list[[i-1]][[1]][1]!="noarg"  ) {
     print(paste("Function has arguments in raw form ",args_list[[i-1]]))
     
     #for each of element of the list , perfrom scan to search for args which are mulitply values
