@@ -18,7 +18,7 @@ smooth_matrix_debug <- function( matx.df, stat.name ) {
 smooth_matrix <- function( matx.df, stat.name ) {
   print(head(matx.df))
   print(stat.name)
-  matx.df <- dcast(as.data.table(matx.df),  wf.test_length ~ wf.train_length,value.var = stat.name)
+  matx.df <- as.data.frame(dcast(as.data.table(matx.df),  wf.test_length ~ wf.train_length,value.var = stat.name))
   orginal_colnames <- as.numeric(colnames(matx.df)[2:ncol(matx.df)])
   orginal_rownames <- matx.df[,1]
   
@@ -35,9 +35,9 @@ smooth_matrix <- function( matx.df, stat.name ) {
   for (col in 1:ncol(matx.df)) {
     for (row in 1:nrow(matx.df)) {
       
-	  print(paste( "Row", row,"Col ", col, " Value " , matx.df[row,..col]))    
+	  print(paste( "Row", row,"Col ", col, " Value " , matx.df[row,col]))    
 	  
-	  cellvalue <- matx.df[row,..col]
+	  cellvalue <- matx.df[row,col]
 	  
       nbvalue <- c()
 	  
@@ -53,7 +53,7 @@ smooth_matrix <- function( matx.df, stat.name ) {
         }
       }
 	  
-      weighted <- (mean(nbvalue) + matx.df[row,..col])/2
+      weighted <- (mean(nbvalue) + matx.df[row,col])/2
 	  
       dflist <- append(dflist, list(data.frame(wf.test_length = rowname.map.df[row,] , wf.train_length = colname.map.df[col,] ,  weighted = as.numeric(weighted))))
     }
@@ -61,9 +61,9 @@ smooth_matrix <- function( matx.df, stat.name ) {
   d <- do.call(rbind, dflist)
 }
 
-sharpe.df <- readRDS("./data_to_share/01_sharpe_heatmap.rds")
-debug(smooth_matrix)
-smoothed.df <- smooth_matrix(sharpe.df, "sharpe_ratio")
+#sharpe.df <- readRDS("./data_to_share/01_sharpe_heatmap.rds")
+#debug(smooth_matrix)
+#smoothed.df <- smooth_matrix(sharpe.df, "sharpe_ratio")
 
 
 
