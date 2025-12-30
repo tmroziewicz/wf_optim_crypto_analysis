@@ -1,5 +1,7 @@
-if (!require("pacman")) install.packages("pacman", repos = "http://cran.us.r-project.org")
-pacman::p_load(xts,dplyr,psych)
+library(xts)
+library(dplyr) 
+library(psych)
+
 
 subset_column <- function(data_xts , col_to_select ) {
   return (data_xts[,col_to_select])

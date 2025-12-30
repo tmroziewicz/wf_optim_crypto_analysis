@@ -3,35 +3,35 @@ general:
   bootstrap_helper:         &bootstrap_helper dvc_pipeline/logic/bootstrap_helper.r
   seasonality_helper:         &seasonality_helper dvc_pipeline/logic/seasonality_helper.r
   
-  train_strat_1_raw:        &train_strat_1_raw          data\20231216_22_months\data\crash-taka\01_converted_to_xts.rds
-  train_strat_1_result:     &train_strat_1_result       data\20231216_22_months\data\crash-taka\09_wf_test_evalued.rds
-  train_strat_1_metric:     &train_strat_1_metric       data\20231216_22_months\data\crash-taka\metrics.yaml
-  train_strat_1_positions:  &train_strat_1_positions    data\20231216_22_months\data\crash-taka\04_positions.rds
-  train_strat_1_wf_indexes: &train_strat_1_wf_indexes   data\20231216_22_months\data\crash-taka\06_wf_indexes.rds
-  train_strat_2_result:     &train_strat_2_result       data\20231216_22_months\data\liney-jass\09_wf_test_evalued.rds
-  train_strat_2_metric:     &train_strat_2_metric       data\20231216_22_months\data\liney-jass\metrics.yaml
-  train_strat_2_positions:  &train_strat_2_positions    data\20231216_22_months\data\crash-taka\04_positions.rds  
-  train_strat_2_wf_indexes: &train_strat_2_wf_indexes   data\20231216_22_months\data\liney-jass\06_wf_indexes.rds
+  train_strat_1_raw:        &train_strat_1_raw          data\global_training_period_results\dvc-exps\crash-taka\01_converted_to_xts.rds
+  train_strat_1_result:     &train_strat_1_result       data\global_training_period_results\dvc-exps\crash-taka\09_wf_test_evalued.rds
+  train_strat_1_metric:     &train_strat_1_metric       data\global_training_period_results\dvc-exps\crash-taka\metrics.yaml
+  train_strat_1_positions:  &train_strat_1_positions    data\global_training_period_results\dvc-exps\crash-taka\04_positions.rds
+  train_strat_1_wf_indexes: &train_strat_1_wf_indexes   data\global_training_period_results\dvc-exps\crash-taka\06_wf_indexes.rds
+  train_strat_2_result:     &train_strat_2_result       data\global_training_period_results\dvc-exps\liney-jass\09_wf_test_evalued.rds
+  train_strat_2_metric:     &train_strat_2_metric       data\global_training_period_results\dvc-exps\liney-jass\metrics.yaml
+  train_strat_2_positions:  &train_strat_2_positions    data\global_training_period_results\dvc-exps\crash-taka\04_positions.rds  
+  train_strat_2_wf_indexes: &train_strat_2_wf_indexes   data\global_training_period_results\dvc-exps\liney-jass\06_wf_indexes.rds
   
   train_strat_1_cost_sens: &train_strat_1_cost_sens   data_to_share\15_cost_sensitivitiy.rds
   train_strat_1_cost_sens_stats: &train_strat_1_cost_sens_stats   data_to_share\15_cost_sensitivitiy_stats.rds
 
 #unseen variable
-  unseen_strat_1_result:  &unseen_strat_1_result     data\20240105_unseen\data\TRAIN_7_TEST_28_BTC_ochre-expo\09_wf_test_evalued.rds
-  unseen_strat_2_result:  &unseen_strat_2_result     data\20240105_unseen\data\TRAIN_14_TEST_10_BTC_incog-caps\09_wf_test_evalued.rds 
-  unseen_strat_3_result:  &unseen_strat_3_result     data\20240105_unseen\data\TRAIN_7_TEST_28_ETH_crack-torc\09_wf_test_evalued.rds
-  unseen_strat_4_result:  &unseen_strat_4_result     data\20240105_unseen\data\TRAIN_14_TEST_10_ETH_blear-taco\09_wf_test_evalued.rds
-  unseen_strat_5_result:  &unseen_strat_5_result     data\20240105_unseen\data\TRAIN_7_TEST_28_BNB_telic-ions\09_wf_test_evalued.rds
-  unseen_strat_6_result:  &unseen_strat_6_result     data\20240105_unseen\data\TRAIN_14_TEST_10_BNB_varus-puck\09_wf_test_evalued.rds
+  unseen_strat_1_result:  &unseen_strat_1_result     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_ochre-expo\09_wf_test_evalued.rds
+  unseen_strat_2_result:  &unseen_strat_2_result     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BTC_incog-caps\09_wf_test_evalued.rds 
+  unseen_strat_3_result:  &unseen_strat_3_result     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_ETH_crack-torc\09_wf_test_evalued.rds
+  unseen_strat_4_result:  &unseen_strat_4_result     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_ETH_blear-taco\09_wf_test_evalued.rds
+  unseen_strat_5_result:  &unseen_strat_5_result     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_BNB_telic-ions\09_wf_test_evalued.rds
+  unseen_strat_6_result:  &unseen_strat_6_result     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BNB_varus-puck\09_wf_test_evalued.rds
 
 
 
-  unseen_strat_1_metric:  &unseen_strat_1_metric     data\20240105_unseen\data\TRAIN_7_TEST_28_BTC_ochre-expo\metrics.yaml
-  unseen_strat_2_metric:  &unseen_strat_2_metric     data\20240105_unseen\data\TRAIN_14_TEST_10_BTC_incog-caps\metrics.yaml 
-  unseen_strat_3_metric:  &unseen_strat_3_metric     data\20240105_unseen\data\TRAIN_7_TEST_28_ETH_crack-torc\metrics.yaml
-  unseen_strat_4_metric:  &unseen_strat_4_metric     data\20240105_unseen\data\TRAIN_14_TEST_10_ETH_blear-taco\metrics.yaml
-  unseen_strat_5_metric:  &unseen_strat_5_metric     data\20240105_unseen\data\TRAIN_7_TEST_28_BNB_telic-ions\metrics.yaml
-  unseen_strat_6_metric:  &unseen_strat_6_metric     data\20240105_unseen\data\TRAIN_14_TEST_10_BNB_varus-puck\metrics.yaml
+  unseen_strat_1_metric:  &unseen_strat_1_metric     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_ochre-expo\metrics.yaml
+  unseen_strat_2_metric:  &unseen_strat_2_metric     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BTC_incog-caps\metrics.yaml 
+  unseen_strat_3_metric:  &unseen_strat_3_metric     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_ETH_crack-torc\metrics.yaml
+  unseen_strat_4_metric:  &unseen_strat_4_metric     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_ETH_blear-taco\metrics.yaml
+  unseen_strat_5_metric:  &unseen_strat_5_metric     data\unseen_period_results\dvc-exps-exp\TRAIN_7_TEST_28_BNB_telic-ions\metrics.yaml
+  unseen_strat_6_metric:  &unseen_strat_6_metric     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BNB_varus-puck\metrics.yaml
 
   unseen_strat_1_eq_curve: &unseen_strat_1_eq_curve     data_to_share\11_01_BTC_7_28_equity_curve_xts.rds
   unseen_strat_2_eq_curve: &unseen_strat_2_eq_curve     data_to_share\11_02_BTC_14_10_equity_curve_xts.rds
@@ -76,12 +76,12 @@ general:
     - saveRDS
   args:
     - noarg
-  input: data\20231216_22_months\20231216_22_months.csv
+  input: data\global_training_period_results\global_trainig_period_wf_dvc_results.csv
   output: data_to_share\01_sharpe_heatmap.rds
   
 02_smooth_heatmap:
   script: dvc_pipeline/function_caller.r  
-  helper: smooth-matrix.R
+  helper: dvc_pipeline/logic/smooth-matrix.R
   funs:
     - readRDS
     - smooth_matrix
@@ -101,7 +101,7 @@ general:
     - saveRDS
   args: 
     - noarg
-  input: data\3mln_9month\20231015_3mln_exp.csv
+  input: data\global_training_period_results\global_trainig_period_wf_different_tf_dvc_results.csv
   output: data_to_share\03_mean_sharpe_per_tf_df.rds
 
 04_basic_stats_per_tf:

@@ -1,8 +1,12 @@
-if (!require("pacman")) install.packages("pacman", repos = "http://cran.us.r-project.org")
-pacman::p_load(xts,dplyr, PerformanceAnalytics,psych,tseries)
-source("..\\Master-Thesis\\master\\rcode\\logic\\helpers\\metrics_helper.r")
-source("..\\Master-Thesis\\master\\rcode\\logic\\helpers\\datetime_helper.r")
-source("..\\Master-Thesis\\master\\rcode\\logic\\helpers\\data_helper.r")
+library(xts)
+library(dplyr) 
+library(PerformanceAnalytics)
+library(psych)
+library(tseries)
+
+source("..\\Master-Thesis-public\\master\\rcode\\logic\\helpers\\metrics_helper.r")
+source("..\\Master-Thesis-public\\master\\rcode\\logic\\helpers\\datetime_helper.r")
+source("..\\Master-Thesis-public\\master\\rcode\\logic\\helpers\\data_helper.r")
 
 
 
