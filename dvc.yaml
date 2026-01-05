@@ -28,6 +28,7 @@ stages:
     deps:
     - ${03_mean_per_tf.input}
     - ${03_mean_per_tf.script}    
+    - ${03_mean_per_tf.helper}    
     outs:
     - ${03_mean_per_tf.output}    
     params:
@@ -45,20 +46,7 @@ stages:
     params:
     - 04_basic_stats_per_tf
     - general
-    
-  05_trading_stats_per_tf:
-    cmd: rscript ${05_trading_stats_per_tf.script}  --inputfile  ${05_trading_stats_per_tf.input} --output ${05_trading_stats_per_tf.output}  --helper ${05_trading_stats_per_tf.helper}  --funs ${05_trading_stats_per_tf.funs[0]},${05_trading_stats_per_tf.funs[1]},${05_trading_stats_per_tf.funs[2]}  --args ${05_trading_stats_per_tf.args[0]} 
-    deps:
-    - ${04_basic_stats_per_tf.input}
-    - ${04_basic_stats_per_tf.script}    
-    - ${general.analyse_helper}
-    outs:
-    - ${05_trading_stats_per_tf.output}    
-    params:
-    - 05_trading_stats_per_tf
-    - 04_basic_stats_per_tf
-    - general
-  
+ 
   06_00_equity_curve_strategy_asset:
     foreach: ${06_00_equity_curve_strategy_asset.dataset}
     do: 

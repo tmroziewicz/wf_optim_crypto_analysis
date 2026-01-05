@@ -101,7 +101,7 @@ general:
     - saveRDS
   args: 
     - noarg
-  input: data\global_training_period_results\global_trainig_period_wf_different_tf_dvc_results.csv
+  input: data\global_training_period_results\global_training_period_results_dvc_simple.csv
   output: data_to_share\03_mean_sharpe_per_tf_df.rds
 
 04_basic_stats_per_tf:
@@ -116,19 +116,6 @@ general:
     
   input:  *train_strat_1_raw
   output: data_to_share\04_basic_asset_desc_tbl.rds
-
-
-05_trading_stats_per_tf:
-  script: dvc_pipeline/function_caller.r  
-  helper: dvc_pipeline/logic/analyse_helper.r
-  funs:
-    - readRDS
-    - get_trading_stats_per_tf
-    - saveRDS
-  args: 
-    - 30;60
-  input: data\8.7mln_1.5year\01_converted_to_xts.rds
-  output: data_to_share\05_trading_statistics_df.rds
 
 
 06_00_equity_curve_strategy_asset:
