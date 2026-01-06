@@ -208,6 +208,12 @@ calculate_portfolio <- function(merged_returns_xts, col_to_select, title="Portfo
 
 get_cost_sensitivity_returns <- function( orginal_results_xts ) {
   print(head(orginal_results_xts))
+  current_wd_str <- getwd()
+  setwd(WF_CRYPTO_REPO)
+  source(paste0(WF_CRYPTO_REPO,"\\master\\rcode\\logic\\strategy.r"))
+  param_path_str <- paste0(WF_CRYPTO_REPO,"\\master\\rcode\\logic\\strategy_param.yaml")
+  setwd(current_wd_str)
+  
   strategy.obj <- Strategy$new(param.path.str = param_path_str)
   setwd(current_wd_str)
   
