@@ -3,22 +3,21 @@ library(dplyr)
 library(PerformanceAnalytics)
 library(psych)
 library(tseries)
+source("config.r")
 
-source("..\\Master-Thesis-public\\master\\rcode\\logic\\helpers\\metrics_helper.r")
-source("..\\Master-Thesis-public\\master\\rcode\\logic\\helpers\\datetime_helper.r")
-source("..\\Master-Thesis-public\\master\\rcode\\logic\\helpers\\data_helper.r")
-
-
+source(paste0(WF_CRYPTO_REPO,"\\master\\rcode\\logic\\helpers\\metrics_helper.r"))
+source(paste0(WF_CRYPTO_REPO,"\\master\\rcode\\logic\\helpers\\datetime_helper.r"))
+source(paste0(WF_CRYPTO_REPO,"\\master\\rcode\\logic\\helpers\\data_helper.r"))
 
 generate_heatmap <- function(experiment_df) {
-  experiment_df %>% filter(rev != "workspace" &  rev != "main" & typ !="baseline"  & State != "Failed") %>% select( general.tfmin, general.performance_stat,sharpe_ratio,ir2,sortino_ratio, wf.train_length,wf.test_length ) -> exps_df
+  experiment_df %>% filter(rev != "workspace" &  rev != "main" & typ !="baseline" & State != "Failed") %>% select( general.tfmin, general.performance_stat,sharpe_ratio,ir2,sortino_ratio, wf.train_length,wf.test_length ) -> exps_df
   sharpe_heatmap.df <- exps_df %>% filter( general.performance_stat == "sharpe" )
   return(sharpe_heatmap.df)  
 }
 
 get_mean_per_tf <- function(experiment_df) {
   print(head(experiment_df))
-  experiment_df %>% filter(rev != "workspace" &  rev != "main" & typ !="baseline"  ) %>% select( general.tfmin, general.performance_stat,sharpe_ratio,wf.train_length,wf.test_length ) -> exps_df
+  experiment_df %>% filter(rev != "workspace" &  rev != "main" & typ !="baseline" & State != "Failed" ) %>% select( general.tfmin, general.performance_stat,sharpe_ratio,wf.train_length,wf.test_length ) -> exps_df
   exps_df %>% group_by(general.tfmin) %>% summarise(mean.sharpe.per.tfmin = mean(sharpe_ratio), max.sharpe.per.tfmin = max(sharpe_ratio), min.sharpe.per.tfmin = min(sharpe_ratio), std.sharpe.per.tfmin = sd(sharpe_ratio),  quantile_25 = quantile(sharpe_ratio, probs=0.25 ), quantile_50 = quantile(sharpe_ratio, probs=0.50 ), quantile_75 = quantile(sharpe_ratio, probs=0.75 )) -> mean.sharpe.per.tf.df
   return (mean.sharpe.per.tf.df)
 }

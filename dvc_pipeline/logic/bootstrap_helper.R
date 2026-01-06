@@ -1,12 +1,15 @@
 source("dvc_pipeline/logic/analyse_helper.r")
+source("config.r")
+
+current_wd_str <- getwd()
+setwd(WF_CRYPTO_REPO)
+source(paste0(WF_CRYPTO_REPO,"\\master\\rcode\\logic\\strategy.r"))
+param_path_str <- paste0(WF_CRYPTO_REPO,"\\master\\rcode\\logic\\strategy_param.yaml")
+
+setwd(current_wd_str)
+
 bootstrap_positions <- function(asset_positions.xts, no_iter=10, freq=0) {
-  current_wd_str <- getwd()
-  setwd("..\\Master-Thesis")
-  source("..\\Master-Thesis\\master\\rcode\\logic\\strategy.r")
-  param_path_str <- "..\\Master-Thesis\\master\\rcode\\logic\\strategy_param.yaml"
   strategy.obj <- Strategy$new(param.path.str = param_path_str)
-  setwd(current_wd_str)
-  
   orginal.vec <- as.vector(coredata(asset_positions.xts[,2]))
   
   encoding <- rle(orginal.vec)
@@ -88,13 +91,7 @@ get_random_ma_path <- function(ma_positions.xts, wf.index.df, mas_combinations.v
   return (bootposition.xts)
 }
 
-#temp.xts <- temp.xts[date.filter.str, ]
-
 do_bootstrap_ma <- function(positions.xts, wf.index.df, date.filter.str,no_iter, freq =0) {
-  current_wd_str <- getwd()
-  setwd("..\\Master-Thesis")
-  source("..\\Master-Thesis\\master\\rcode\\logic\\strategy.r")
-  param_path_str <- "..\\Master-Thesis\\master\\rcode\\logic\\strategy_param.yaml"
   strategy.obj <- Strategy$new(param.path.str = param_path_str)
   setwd(current_wd_str)
   sharpe_vec <- c()
