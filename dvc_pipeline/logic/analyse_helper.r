@@ -208,10 +208,6 @@ calculate_portfolio <- function(merged_returns_xts, col_to_select, title="Portfo
 
 get_cost_sensitivity_returns <- function( orginal_results_xts ) {
   print(head(orginal_results_xts))
-  current_wd_str <- getwd()
-  setwd("..\\Master-Thesis")
-  source("..\\Master-Thesis\\master\\rcode\\logic\\strategy.r")
-  param_path_str <- "..\\Master-Thesis\\master\\rcode\\logic\\strategy_param.yaml"
   strategy.obj <- Strategy$new(param.path.str = param_path_str)
   setwd(current_wd_str)
   
