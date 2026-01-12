@@ -173,6 +173,7 @@ line_height <- 1.5
 \newpage
 Version containing only charts and tables.
 \newpage
+
 # Introduction 
 
 

@@ -58,8 +58,7 @@ stages:
     params:
     - 05_trading_stats_per_tf
     - 04_basic_stats_per_tf
-    - general
-  
+    - general    
  
   06_00_equity_curve_strategy_asset:
     foreach: ${06_00_equity_curve_strategy_asset.dataset}

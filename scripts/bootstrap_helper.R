@@ -1,5 +1,6 @@
-source("dvc_pipeline/logic/analyse_helper.r")
-source("config.r")
+library("here")
+source(here("scripts/analyse_helper.r"))
+source(here("config.r"))
 
 current_wd_str <- getwd()
 setwd(WF_CRYPTO_REPO)
