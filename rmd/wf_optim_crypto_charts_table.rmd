@@ -1,0 +1,818 @@
+---
+author: ""
+title: ""
+date: ""
+#bibliography: "20230613_libs.bib"
+csl: begell-house-chicago-author-date.csl
+link-citations: true
+reference-section-title: References
+mainfont: "Times New Roman"
+fontsize: 12pt
+geometry: margin=2.5cm
+linestretch: 1.5
+output: 
+  pdf_document: 
+    latex_engine: pdflatex
+    pandoc_args: "--pdf-engine-opt=--shell-escape"
+    template: latex-template\default-modified.latex
+    toc: true
+    number_sections: true
+    extra_dependencies: ["float"]
+
+  
+    
+params:
+  asset_name : "Analized Asset name "
+  fee: "Fee used in analysis"
+  best_sharpe_dbl : "Best Sharpe ratio result, single number."
+  equity_curve_xts : "Best strategy PNL vs. Asset "
+  mean_sharpe_per_tf_df : "Dataframe with mean sharpe by different timeframe "
+  sharpe_heatmap.df : "Dataframe contains, sharpe ratio and its statistics by dataframe   "
+  smoothed.df : "Dataframe contains, smoothed sharpe ratio and its statistics by dataframe   "  
+#  boot_positions_vec : "Vector containing sharpe ratio from bootstrap simulation using positions"
+
+  boot_pos_signif_df : "DF containing significance results  from position bootstrap"
+  boot_ma_signif_df : "DF containing significance results from MA bootstrap"
+  boot_positions_stats :  "DF containng descriptive statistics for bootstrap results position "
+  boot_ma_stats : "DF containng descriptive statistics for bootstrap results Ma "
+  basic_asset_desc_tbl : " Dataframe Psyche type containing statistics of Asset "
+  trading_statistics_df : " Dataframe containing Buy and Hold statistics for Asset "
+  daily_hourly_seasonality_asset_df : " Daily hoursly "
+  hourly_seasonality_asset_df : "Hourly seasonality"
+  weekly_seasonality_asset_df : "Weekly seasonality "
+  strategies_stats: "  Merged results of strategies 4 columns, Strategy Asset Strategy.1 Asset 1 "         
+  unseen_strategies_stats : "Result of strategies on unseen data"                         
+  unseen_equity_curves : "Equity curve for unseen data"                                                         
+  unseen_strategies_portfolio : "Strategies euqity curve equally weighted"
+  unseen_portfolio_stats : "Unseen portfolio statistics"
+  const_sense_curve_xts : "Cost sensitivity "
+  cost_sense_stats_df : "Cost sensitivity trading statistics "
+  btc_xts : "Bitcoin price"
+  
+header-includes:
+- \usepackage{booktabs}
+- \usepackage{longtable}
+- \usepackage{array}
+- \usepackage{multirow}
+- \usepackage{wrapfig}
+- \usepackage{colortbl}
+- \usepackage{pdflscape}
+- \usepackage{tabu}
+- \usepackage{threeparttable}
+- \usepackage{threeparttablex}
+- \usepackage[normalem]{ulem}
+- \usepackage{makecell}
+- \usepackage{xcolor}
+- \usepackage{svg}
+- \usepackage{pdfpages}
+- \usepackage{titlesec}
+- \titlespacing{\title}{0pt}{\parskip}{-\parskip}
+- \usepackage{floatrow}
+- \floatsetup[figure]{capposition=top}
+- \floatsetup[table]{capposition=top}
+- \usepackage{algorithm}
+- \usepackage[noend]{algpseudocode}
+- \usepackage{soul} 
+- \usepackage{ragged2e}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,fig.pos = "H",out.extra = "", warning = FALSE, message = FALSE)
+source("custom_fun/plot_heatmap2.r")
+source("custom_fun/justify_text.r")
+options(knitr.table.format = "latex", knitr.kable.booktabs = TRUE)
+options(digits = 4)              # Modify global options
+
+library(kableExtra)
+kable_table <- function( data, colnames , title="Tabel title", note="", linesep=c("", "", "", "", "\\addlinespace"), replaceSpacesTitle=TRUE, align=c()) {
+  colnames <- gsub("%", "\\\\%", colnames)
+  if(replaceSpacesTitle) {
+	colnames <- gsub(" ", "\n", colnames)
+  }
+  
+  if( length(align) == 0 ) {
+	align <- c(rep('r',times=ncol(data)))
+  }
+
+
+  knitr::kable(data, booktabs = TRUE,  escape = FALSE,col.names = linebreak(colnames, align="r"), 
+               caption=title, row.names = F, linesep = linesep,
+			   align=align
+			   )   %>%   
+    kable_styling(latex_options =c("HOLD_position", "striped"), font_size=10 ) 
+}
+STR_AVOL <- "annualized_volatility"
+STR_AMR <- "annaulized_mean_return"
+STR_MDD <- "max_drawdown"
+trad_stat_select_vec <- c("time_frequency", STR_AMR,STR_AVOL,"sharpe_ratio","information_ratio2",STR_MDD,"sortino_ratio")
+trad_stat_name_vec <- c("Annualized Mean Return","Annualized Volatility","Sharpe Ratio","Information Ratio**","Max Drawdown","Sortino Ratio")
+fun_cell_max_str <- "cell_spec(., %s = ifelse( . == max(.), TRUE, FALSE)  )"
+fun_cell_min_str <- "cell_spec(., %s = ifelse( . == min(.), TRUE, FALSE)   )"
+min_cols <- c(STR_AVOL, STR_MDD)
+max_cols <- trad_stat_select_vec [!(trad_stat_select_vec  %in%  c("time_frequency",min_cols))]
+
+
+make_col_cell_style <-  function(df,col_names, funspec  ) { 
+  df %>% 
+    mutate(across(where(is.numeric), ~ round(., digits = 3))) %>%
+    mutate(
+      across(col_names, ~  !!rlang::parse_expr(funspec) ) 
+    ) -> df
+  return(df)
+}
+
+mark_min_max_trad_stats <- function(df, style="bold") {
+  min_cols <- c(STR_AVOL, STR_MDD)
+  max_cols <- trad_stat_select_vec [!(trad_stat_select_vec  %in%  c("time_frequency",min_cols))]
+  df <- make_col_cell_style(df, min_cols, sprintf(fun_cell_min_str,style))
+  
+  df <- make_col_cell_style(df, max_cols, sprintf(fun_cell_max_str,style))
+  return (df)
+}
+
+
+small_txt <- function(text) {
+	paste("\\\\tiny{", text,"}")
+}
+
+small_txt_gg <- function(text) {
+	paste("\tiny{", text,"}")
+}
+
+
+
+#Strings 
+transaction_cost_desc_str <- "Each transaction incurs a 0.1\\% cost. Changing positions from short to long requires two transactions, resulting in a total cost of 0.2\\%"
+
+transaction_cost_desc_str_tbl <-gsub("\\","\\\\",transaction_cost_desc_str, fixed = TRUE)
+
+transaction_cost_desc_str_fig <- gsub("\\","",transaction_cost_desc_str, fixed = TRUE)
+
+global_train_description_str <- "The global trainig data period covers data from February 8, 2018, to September 1, 2019."
+unseen_test_description_str <- "The unseen data period covers data from November 7, 2019, to August 22, 2021."
+
+strategy_buy_hold_desc_str <- "Buy-and-hold strategy assumed the purchase of given asset at the beginning and selling it at the end of period."
+
+bootstrap_ma_str <- "Bootstrap Evaluation of Subsampled EMA Combinations for Walk-Forward Optimization"
+bootstrap_pos_str <- "Bootstrap Evaluation of Shuffled Transaction blocks"
+
+chart_visualize <- "The chart visualizes: "
+
+global_train_str <- "Global Training Data Period"
+unseen_str <- "Unseen Data Period"
+
+
+text_note_length <- 170
+line_height <- 1.5
+```
+
+\includepdf[pages={-}]{title_page/title.pdf}
+
+\tableofcontents
+
+\newpage
+Version containing only charts and tables.
+\newpage
+# Introduction 
+
+
+# Data 
+
+## Description of data 
+
+```{r bitcoin_price , echo=FALSE, fig.cap="\\label{bitcoin_price} Price of Bitcoin with marked Global Training/Unseen Period", fig.topcaption=TRUE}
+
+global_train_start <- as.Date("2018-02-08")
+global_train_end <- as.Date("2019-09-01")
+
+unseen_start <- as.Date("2019-11-07")
+unseen_end <- as.Date("2021-08-22")
+text <- "Note:This is a caption with two spaces
+Bitcoin price   (shaded area indicates data division).     The global
+trainig data period covers data from February 8, 2018, to September 1,
+2019.  The  global  trainig  data  period covers data from February 8,
+2018, to September 1, 2019."
+
+text <- justify_text(
+							paste(
+								"Note: Bitcoin price (shaded area indicates data division).",
+								global_train_description_str, 								
+								sep=" "
+							),
+							100
+					)
+
+
+#text <- gsub(" ", "_", text)
+text <- gsub("\n", "<BR>", text)
+
+
+ggplot(btc_xts) +
+  geom_line(aes(x = index(btc_xts), y = Bitcoin, colour = 'Bitcoin')) +
+  theme_bw()+
+	  theme(
+			panel.border=element_blank(),legend.position=c(0,1),
+			legend.justification=c(0,1),
+			legend.direction='vertical',legend.title=element_blank(),
+			plot.caption = element_text(hjust = 0, size=6, margin=unit(c(10,0,0,0) , "pt"), family="Times", lineheight=1.5)			
+		)  +
+  annotate('rect', xmin = global_train_start, xmax = global_train_end, ymin = 0, ymax = 70000, alpha = 0.2, fill = 'blue')+
+  annotate('rect', xmin = unseen_start, xmax = unseen_end, ymin = 0, ymax = 70000, alpha = 0.2, fill = 'green')+
+  annotate('text', x=as.Date('2018-10-01'), y=40000, label= "Global Training Period")+
+  annotate('text', x=as.Date('2020-07-01'), y=40000, label= "Unseen Period")+
+  xlab("Research Period")+
+  ylab("Bitcoin Price") +
+  labs(caption = str_wrap(
+							 paste(   "Note: Bitcoin price (shaded area indicates data division).",
+									global_train_description_str,
+									unseen_test_description_str									
+							 ),
+							 text_note_length
+						 )
+	  )
+		
+
+  
+  
+
+```
+
+
+
+
+## Description of the `r global_train_str`
+
+
+## Basic statistic properties
+```{r descripitve_stats, echo=FALSE}
+
+desc_cols_select_vec <- c( "mean", "sd", "median", "min","max","range","skew","kurtosis")
+desc_cols_names_vec <-  c( "Mean", "SD", "Median", "Min","Max","Range","Skew","Kurtosis")
+
+cols_sel_vec <- c(desc_cols_select_vec,"Jb_Pvalue")
+cols_nam_vec <- c( desc_cols_names_vec, "JB P-Value")
+
+basic_asset_desc_tbl <- params$basic_asset_desc_tbl[,c("time_frequency",cols_sel_vec)]
+kable_table(basic_asset_desc_tbl, colnames =c("Freq Minutes",cols_nam_vec), title="\\label{desc_stats} Descriptive statistics of the global training data for Bitcoin (BTC)", 
+			note="In this context, frequency refers to the sampling rate of the financial data, which is 1 minute in this case.") %>%
+         footnote(general_title = small_txt("Note:"), 
+           footnote_as_chunk = TRUE,
+           threeparttable = TRUE,
+		   general = small_txt(
+								paste("Descriptive statistics of the global training data for Bitcoin (BTC). ",
+									"JB P-Value - Jarque–Bera test p-value",                           global_train_description_str,
+									"All statistics are presented on a non-annualized basis."
+								)
+							  ),
+			 escape = FALSE
+	
+		 )
+
+```
+
+# Methodology 
+## The Walk-Forward Method
+
+## Exponential Moving Average Crossover
+### Position of strategy 
+## Optimization 
+### Specific periods of walk-forward training/testing considered
+### Optimization approach
+### Visualization
+### Smoothing  grid 
+### Choice of Smoothing Weights
+### Identifying optimal parameters for out-of-sample evaluation based on the smoothed grid
+### Overall optimization summary
+## Statistical significance
+### `r bootstrap_ma_str`
+### `r bootstrap_pos_str`
+### Null hyphotestis
+## Cost sensitivity 
+### Cost levels
+### Procedure used 
+## Algorithms descriptions
+### WF parameters optimization algorithm with evaluation of results on the unseen period
+### Performance metrics
+#### Annualized Mean Return  \
+#### Annualized Volatility \
+#### Sharpe ratio \
+### Information Ratio** \ 
+### Maximum Drawdown  \
+### Sortino ratio  \
+# Results - `r global_train_str`
+
+## Choice of data frequency on results
+```{r sharpe_per_tf, echo=FALSE}
+colnames <- c("Frequency Minutes", "Mean Sharpe", "Max Sharpe", "Min Sharpe", "STD Sharpe", "Q25% Sharpe","Q50% Sharpe", "Q75% Sharpe")
+#knitr::kable(params$mean_sharpe_per_tf_df, booktabs = TRUE, col.names =  colnames, linesep="")   %>%
+ # kable_styling(latex_options =c("scale_down","hold_position", "striped"))
+
+
+kable_table(params$mean_sharpe_per_tf_df, colnames, title="\\label{trad_stats_by_tf} The Descriptive Statistics of Sharpe Ratio for 81 walk-forward combinations per timeframe - Global Train Data Period") %>%
+           footnote(footnote_as_chunk = TRUE,
+           threeparttable = TRUE,
+           general_title=small_txt("Note:"),
+           general = small_txt(paste(
+  "The descriptive statistics of the Sharpe Ratio achieved by Exponential Moving Averages (EMA) strategies with walk-forward optimization executed on different time frequencies within the global training data, using varying training and testing window sizes. For each time frequency, the walk-forward optimization was performed multiple times with same windows combinations.",
+  global_train_description_str,
+  transaction_cost_desc_str_tbl
+  )),
+           fixed_small_size=TRUE,
+           escape = FALSE)
+
+
+```
+## The walk-forward optimization results 
+
+### Walk-Forward Sharpe Ratios: Heatmap by Training/Testing Length (60-Minute) 
+
+```{r sharpe_heatmap , echo=FALSE, fig.cap="\\label{sharpe_grid}Walk-Forward Sharpe Ratios: Heatmap by Training/Testing Length", fig.topcaption=TRUE}
+
+sharpe_name <- "Sharpe Ratios" 
+
+grid_desc_str <- "for walk-forward optimization on 60-minute Bitcoin price data within the global training period, using Exponential Moving Averages (EMA).The horizontal axis represents the training window size, which is the amount of historical data used to train the EMA strategy.The vertical axis represents the testing window size, which is the amount of data used to evaluate the performance of the EMA strategy after training.
+The intersection of a specific training window size and testing window size on the chart shows the corresponding Sharpe Ratio achieved by the walk-forward optimization with EMA for those parameters."
+
+text <-	str_wrap  (
+					paste("Note:",
+						"This  graph analyzes the Sharpe Ratios ",grid_desc_str,
+						global_train_description_str,
+						gsub("\\","",transaction_cost_desc_str_fig, fixed = TRUE)
+					), 
+					text_note_length)
+
+
+
+plotHeatmap2(data_plot = sharpe_heatmap.df[sharpe_heatmap.df$general.tfmin==60,], # dataset (data.frame) with calculations
+            col_vlabels = "wf.test_length", # column name with the labels for a vertical axis (string)
+            col_hlabels = "wf.train_length", # column name with the labels for a horizontal axis (string)
+            col_variable = "sharpe_ratio" # column name with the variable to show (string)
+            ) +
+  theme(plot.caption = element_text(hjust = 0, size=6, margin=unit(c(10,0,0,0) , "pt"), lineheight=line_height, family="Times")	)+  
+  labs(caption = text )
+
+
+```
+
+#### Walk-Forward Robust Sharpe Ratios: Heatmap (Smoothed Values) by Training/Testing Length (60-Minute) \newline
+```{r sharpe_heatmap_smoothed, echo=FALSE,  fig.cap="\\label{sharpe_grid_smoothed}Walk-Forward Robust Sharpe Ratios: Heatmap (Smoothed Values) by Training/Testing Length", fig.topcaption=TRUE}
+size_note_gg <- text_note_length
+text <-	justify_text  (
+				paste(
+				"Note: ","This graph analyzes the smoothed heatmap of Robust Sharpe Ratios ", grid_desc_str,
+				 "Robust Sharpe Ratio values were calculated using a weighted average. In this approach, the original value retained half the weight, while the remaining weight was distributed among its neighboring values.",
+				global_train_description_str,
+				transaction_cost_desc_str_fig
+				),size_note_gg)
+			
+#text <- gsub(" ", "_", text)
+text <- gsub("\n", "<BR>", text)
+
+plotHeatmap2(data_plot = smoothed.df, # dataset (data.frame) with calculations
+            col_vlabels = "wf.test_length", # column name with the labels for a vertical axis (string)
+            col_hlabels = "wf.train_length", # column name with the labels for a horizontal axis (string)
+            col_variable = "weighted" # column name with the variable to show (string)
+            )   +
+ 
+theme(plot.caption = element_text(hjust = 0, size=6, margin=unit(c(5,0,0,0) , "pt"), lineheight=line_height, family="Times")	    
+	)+  
+
+labs(caption = str_wrap(
+	paste("Note: ","This graph analyzes the smoothed heatmap of Robust Sharpe Ratios ", grid_desc_str,
+			"Robust Sharpe Ratio values were calculated using a weighted average. In this approach, the original value retained half the weight, while the remaining weight was distributed among its neighboring values.",
+			global_train_description_str,
+			transaction_cost_desc_str_fig
+	), text_note_length)
+
+)
+
+
+#labs(caption = text)
+
+
+```
+
+
+
+#### Selected Combinations
+```{r define_vars, echo=FALSE}
+strategies_global_train_desc_str <-  "strategies identified through a walk-forward optimization process, where the length of the training and testing periods of a walk-forward was optimized. These strategies, used Exponential Moving Averages (EMA), 
+achieved the highest Sharpe Ratio for Bitcoin within the global training period."
+
+strategy_bh_desc_str <- "Buy"
+```
+
+## Performance Metrics - `r global_train_str` - Walk-Forward Top Combinations
+```{r trading_stats_global_train, echo=FALSE}
+trading_metrics_str <- "This table presents trading metrics"
+
+strategies_rows_desc_str <- "Each row showcases the performance metrics when using varying training and testing window sizes for a walk-forward optimization "
+
+
+kable_table(params$strategies_stats, colnames=c("Description",trad_stat_name_vec), title="\\label{tbl_trade_stats_train}Trading Metrics: Top Sharpe Ratio Strategies (Walk-Forward, Global Training)") %>% 
+           footnote(footnote_as_chunk = TRUE,
+           threeparttable = TRUE,
+           general_title=small_txt("Note:"),
+           general = small_txt(paste(trading_metrics_str,"for",
+                                 strategies_global_train_desc_str, 
+                                 global_train_description_str,
+                                 strategies_rows_desc_str,
+                                 transaction_cost_desc_str_tbl)
+                      ),
+           fixed_small_size=TRUE,
+           escape = FALSE)
+
+
+```
+ 
+## Equity Curves - `r global_train_str` - Walk-Forward Top Combinations
+```{r , echo=FALSE,fig.cap="\\label{equity_curve_train}Equity Curves: Top Sharpe Ratio Strategies (Walk-Forward, Global Training Data Period)", fig.topcaption=TRUE}
+equity_curve_xts <- exp(cumsum(params$equity_curve_xts))
+
+ggplot(equity_curve_xts) +
+  
+  geom_line(aes(x = index(equity_curve_xts), y = `BTC Train 7 Test 28`, colour = 'BTC Train 7 Test 28'), linetype="dotted") +
+  geom_line(aes(x = index(equity_curve_xts), y = `BTC Train 14 Test 10`, colour = 'BTC Train 14 Test 10')) +
+  geom_line(aes(x = index(equity_curve_xts), y = `Buy And Hold BTC`, colour = 'Buy-And-Hold BTC'),linetype="dotdash" ) +
+  theme_bw()+
+  theme(panel.border=element_blank(),legend.position=c(0,1),
+          legend.justification=c(0,1),
+        legend.direction='vertical',legend.title=element_blank(),plot.caption = element_text(hjust = 0, size=6, margin=unit(c(10,0,0,0) , "pt"), lineheight=line_height, family="Times")	)+
+  coord_trans(y ='log')+
+  xlab("Global Training Period") +
+  ylab("Cummulative Returns") +
+  labs(caption = str_wrap(paste("Note: Cumulative Returns (Equity curves) for",
+               strategies_global_train_desc_str, 
+               strategy_buy_hold_desc_str,
+                                 global_train_description_str, 
+                                 transaction_cost_desc_str_fig
+    
+  ),text_note_length))
+```
+
+
+
+
+
+
+
+
+## Statistical significance - Bootstraps
+```{r boot_mavar, echo=FALSE}
+bootstrap_ma_desc_str <- "This method differs from the standard approach by using random EMA parameters drawn from a predefined set described in the section [Exponential Moving Average Crossover], 
+whereas the standard approach selects the best EMA parameters identified during the training period for each walk-forward step.
+This allows assessing the performance of the selection method compared to random selection. A bootstrap procedure was performed on the global training period."
+
+col_desc_str <- "Original Sharpe Ratio - Sharpe Ratios of the Pre-Selected Best Strategies from the Global Training Period,  Total No. of bootstrap iterations - Number of times the bootstrap procedure was repeated, No. Bootstrap Iterations with Higher Sharpe Ratio - Number of bootstrap iterations that achieved a Sharpe Ratio exceeding the original strategy's Sharpe Ratio. "
+
+bootstrap_pos_desc_str <- "shuffles blocks of orginal  transactional positions generated by the walk-forward within the global traininig period."
+
+boot_names_vec <- c("Description","Original\nSharpe Ratio", "Total No. of\nbootstrap iterations", "No. Bootstrap Iterations\nwith Higher Sharpe Ratio","Significance%")
+
+boot_note_original <- "For clarification, \"original\" in this context refers to the strategies that were pre-selected during the global training period, as described in section Selected Combinations."
+
+```
+### Results - `r bootstrap_ma_str`
+```{r boot_ma_table , echo=FALSE}
+#sum(params$boot_positions>params$best_sharpe_dbl)
+
+
+
+
+kable_table(params$boot_ma_signif_df, colnames=boot_names_vec,title=paste("Results -", bootstrap_ma_str), replaceSpacesTitle = FALSE) %>% 
+
+           footnote(footnote_as_chunk = TRUE,
+           threeparttable = TRUE,
+           general_title=small_txt("Note:"),
+           general = small_txt(		   
+			   paste(
+				 col_desc_str,             
+				 boot_note_original,
+				 bootstrap_ma_desc_str, "The cost assumption remains the same as in previous calculations.",
+				 global_train_description_str,
+				 transaction_cost_desc_str_tbl            
+			   )		   
+		   ),           
+           escape = FALSE)
+```
+```{r boot_ma_stats, echo=FALSE}
+
+kable_table(params$boot_ma_stats[,c("Description",desc_cols_select_vec)], colnames=c("Description",desc_cols_names_vec),title=paste("\\label{desc_boot_ma_stats}","The Descriptive Statistics of Sharpe Ratios  -", bootstrap_ma_str),replaceSpacesTitle = FALSE) %>% 
+           footnote(footnote_as_chunk = TRUE,
+           threeparttable = TRUE,
+           general_title = small_txt("Note:"),
+           general =small_txt(		   
+			   paste (             
+				 bootstrap_ma_desc_str,			 
+				  "The cost assumption remains the same as in previous calculations.",
+				 global_train_description_str,
+				 transaction_cost_desc_str_tbl
+			   )             
+           ),
+           fixed_small_size=TRUE,
+           escape = FALSE)
+```
+
+#### Results - `r bootstrap_pos_str`
+```{r table_boot_position , echo=FALSE}
+#sum(params$boot_positions>params$best_sharpe_dbl)
+kable_table(params$boot_pos_signif_df, colnames=boot_names_vec, title=paste("Results -", bootstrap_pos_str), replaceSpacesTitle=FALSE) %>% 
+           footnote(footnote_as_chunk = TRUE,
+           threeparttable = TRUE,
+           general_title=small_txt("Note:"),
+           general = small_txt(
+				paste(
+				  col_desc_str,
+				  boot_note_original,
+				  bootstrap_pos_str,
+				  bootstrap_pos_desc_str,
+				  global_train_description_str,
+				  transaction_cost_desc_str_tbl              
+				)
+			),
+           fixed_small_size=TRUE,
+           escape = FALSE)
+```
+```{r boot_positions_stats, echo=FALSE}
+
+kable_table(params$boot_positions_stats[,c("Description",desc_cols_select_vec)], colnames=c("Description",desc_cols_names_vec),title=paste("\\label{desc_boot_pos_stats}","Descriptive Statistics of Sharpe Ratios  -", bootstrap_pos_str)) %>% 
+           footnote(footnote_as_chunk = TRUE,
+           threeparttable = TRUE,
+           general_title=small_txt("Note:"),
+           general = small_txt(
+             paste(
+               bootstrap_pos_str,
+               bootstrap_pos_desc_str,
+               global_train_description_str,
+               transaction_cost_desc_str_tbl
+             )
+           ),
+           fixed_small_size=TRUE,
+           escape = FALSE)
+```
+
+
+## Cost Sensitivity
+
+
+### Strategy Metrics - Cost sensitivity - `r global_train_str`
+```{r trading_stats_cost_sense, echo=FALSE}
+#sum(params$boot_positions>params$best_sharpe_dbl)
+#define variables used in cost sensitivity 
+cost_sense_stat_with_pct <- params$cost_sense_stats_df
+cost_sense_stat_with_pct$Cost <-  paste0(formatC(as.numeric(cost_sense_stat_with_pct$Cost) * 100, format = "f", digits = 2), "\\%")
+cost_sens_desc_str <- "Exponential Moving Average strategy optimized with walk-forward process, with parameters of 7 days for training and 28 days for testing, applied in the global training period, assuming different transactional cost."
+cost_sense_stat_descr_str <- paste("Strategy metrics for ",cost_sens_desc_str)
+
+cost_sense_trad_stat_name_vec <-  c("Annualized\nMean Return","Annualized\nVolatility","Sharpe Ratio","Information Ratio**","Max Drawdown","Sortino Ratio")
+kable_table(cost_sense_stat_with_pct, colnames=c("Cost level",cost_sense_trad_stat_name_vec) ,title="Cost sensitivity", replaceSpacesTitle=FALSE) %>% 
+ footnote(footnote_as_chunk = TRUE,
+           threeparttable = TRUE,
+           general_title= small_txt("Note:"),
+           general = small_txt(
+				paste(
+					cost_sense_stat_descr_str					
+				)
+             ),           
+           escape = FALSE)
+#knitr::kable(params$cost_sense_stats_df, booktabs = TRUE, tit) 
+#colnames <- c("Cost level",trad_stat_name_vec)
+#colnames <- (" ", "\n", colnames)
+#knitr::kable(params$cost_sense_stats_df,booktabs = TRUE,  col.names =linebreak(colnames, align="r") , escape = FALSE)   %>%
+    #kable_styling(latex_options =c("scale_down","HOLD_position", "striped")) 
+
+#%>%  kable_styling(latex_options =c("scale_down","HOLD_position", "striped")) 
+
+```
+```{r coste_sense_by_cost,echo=FALSE, fig.cap="\\label{cost_sense_metric}Strategy metrics for different level of transactional cost", fig.topcaption=TRUE}
+cost_sense_stats_tbl <- params$cost_sense_stats_df
+#trad_stat_name_vec <- c("Annualized Return","Annualized Volatility","Sharpe Ratio","Information Ratio","Max Drawdown","Sortino Ratio")
+colnames(cost_sense_stats_tbl) <- c("Cost",trad_stat_name_vec)
+ggplot(cost_sense_stats_tbl) +
+  geom_line(aes(x = Cost, y = `Sharpe Ratio`, colour = 'Sharpe Ratio')) +
+  geom_line(aes(x = Cost, y = `Information Ratio**`, colour = 'Information Ratio**')) +  
+  geom_line(aes(x = Cost, y = `Sortino Ratio`, colour = 'Sortino Ratio')) +
+  geom_point(aes(x = Cost, y = `Sharpe Ratio`, colour = 'Sharpe Ratio')) +
+  geom_point(aes(x = Cost, y = `Information Ratio**`, colour = 'Information Ratio**')) +  
+  geom_point(aes(x = Cost, y = `Sortino Ratio`, colour = 'Sortino Ratio')) +
+  theme_bw()+
+  theme(panel.border=element_blank(),legend.position=c(1,0.5),
+        legend.justification=c(1,0),
+        legend.direction='vertical',legend.title=element_blank())+
+  xlab("Cost") +
+  ylab("Metric value") + 
+  scale_x_continuous(labels = function(x) paste0(x * 100, '%'))+
+  theme(plot.caption = element_text(hjust = 0, size=6, margin=unit(c(10,0,0,0) , "pt"), lineheight=line_height, family="Times")	)+  
+  labs(caption = str_wrap(paste( "Note:", cost_sense_stat_descr_str
+                                  
+                                )
+                          ,text_note_length
+						  ))
+
+
+```
+```{r equity_curve_cost_sense, echo=FALSE,fig.cap="\\label{cost_sense_equity_curves} Equity curves for different level of transactional cost", fig.topcaption=TRUE }
+const_sense_curve_xts <- params$const_sense_curve_xts
+ggplot(const_sense_curve_xts) +
+  geom_line(aes(x = index(const_sense_curve_xts), y = `0.0005`, colour = '0.0005')) +
+  geom_line(aes(x = index(const_sense_curve_xts), y = `0.0007`, colour = '0.0007')) +
+  geom_line(aes(x = index(const_sense_curve_xts), y = `0.001`, colour = '0.001')) +
+  geom_line(aes(x = index(const_sense_curve_xts), y = `0.002`, colour = '0.002')) +
+  geom_line(aes(x = index(const_sense_curve_xts), y = `0.003`, colour = '0.003')) +
+  geom_line(aes(x = index(const_sense_curve_xts), y = `0.004`, colour = '0.004')) +
+  geom_line(aes(x = index(const_sense_curve_xts), y = `0.005`, colour = '0.005')) +
+  
+  theme_bw()+
+  theme(panel.border=element_blank(),legend.position=c(0,1),
+        legend.justification=c(0,1),
+        legend.direction='vertical',legend.title=element_blank())+
+  coord_trans(y ='log')+
+  xlab("Global Training Period") +
+  ylab("Equity curve different costs") + 
+  theme(plot.caption = element_text(hjust = 0, size=6, margin=unit(c(10,0,0,0) , "pt"), lineheight=line_height, family="Times")	)+  
+  labs(caption = str_wrap(paste("Note: Equity curves",
+								gsub("Strategy metrics","",cost_sense_stat_descr_str)
+								
+
+                        )
+                  ,text_note_length))
+
+
+```
+
+```{r seasonality_vars , echo=FALSE}
+
+season_col_desc_str <- "Obs No - the number of log returns for the given period, P-value T-test/WillCox - p-value of T-Student/WillCox  test used to compare mean of  the log returns of the strategy for a specific period of the week to the overall mean of log returns of the strategy."
+season_begin_str <- "Descriptive statistics of log returns were grouped by "
+season_desc_str <- " with additional p-value of T-Student test and WillCox test"
+season_sign_stars_desc_str <- "Where *, ** and *** - indicate significance levels of 10\\\\%, 5\\\\%, and 1\\\\%, respectively."
+season_significant_desc_str <- "Significant difference in mean between strategy log returns  were found at:"
+
+season_section_begin_str <- "This section analyzes seasonality depending on the"
+
+hour_day_str  <- "Hour of Day"
+day_week_str <- "Day of Week"
+hour_day_week_str <- "Hour of Day of Week"
+```
+```{r unseen_vars , echo=FALSE}
+walk_forward_params_str <- paste(" Walk-Forward Top Combinations from", global_train_str)
+
+```
+
+# Results - `r unseen_str`
+## Results  for single cryptocurrencies on unseen data
+
+```{r trading_stats_unseen , echo=FALSE}
+
+unseen_strategies_desc_str <- "the combination of strategies with the highest Sharpe Ratio identified on the global training period and applied to the unseen period. The global training period was used in the case of BTC to find optimal walk-forward parameters train/test days lengths 7/28 and 14/10. 
+Strategy with these combinations of parameters  executed on the unseen data period using BTC and the cryptocurrencies not used before i.e.  ETH and BNB."
+unseen_bold_explain_str <- "The bolded values indicate the best metric within three strategies for each cryptocurrency separetely, while underlined values indicate the best metrics globally for all nine strategies." 
+
+mark_group_and_total <- function(df,group_best_df, total_best_df) {
+  
+  df_form <- df %>% 
+    mutate(across(where(is.numeric), ~ round(., digits = getOption("digits")   ))) 
+	
+  for ( col in  names(df[, c(max_cols,min_cols)]) ){
+    alreadyU <- FALSE
+    for (rowno in group_best_df[,col]  ) {
+      if (total_best_df[1,col]==rowno) {
+        underline = TRUE
+        alreadyU = TRUE
+      } else {
+        underline = FALSE
+      }
+      df_form[rowno,col] %>% cell_spec(., bold = TRUE,  underline = underline )  -> df_form[rowno,col]
+    }
+    if ( alreadyU == FALSE) {
+      df_form[total_best_df[1,col],col] %>% cell_spec(., bold = TRUE, underline = TRUE )  -> df_form[total_best_df[1,col],col]
+    }
+  }
+  return (df_form)
+
+}
+unseen_strategies_stats <- params$unseen_strategies_stats
+
+
+per_group <- bind_cols(
+	unseen_strategies_stats %>% group_by(c("BTC","BTC","BTC","ETH","ETH","ETH","BNB","BNB","BNB" )) %>% summarise( across(min_cols, which.min)),
+	unseen_strategies_stats %>% group_by(c("BTC","BTC","BTC","ETH","ETH","ETH","BNB","BNB","BNB" )) %>% summarise( across(max_cols, which.max))
+) %>% rename( currency = 1) %>%
+  arrange(
+    factor(currency,levels=c("BTC","ETH","BNB"))
+  )
+
+per_group <- per_group[,c(max_cols,min_cols)]+c(0,3,6)
+#total_best_df <- unseen_strategies_stats %>% summarise( across(c(max_cols,min_cols), which.max)) 
+
+
+total_best_df <- bind_cols(
+  unseen_strategies_stats %>% summarise( across(max_cols, which.max)) ,
+ unseen_strategies_stats %>% summarise( across(min_cols, which.min)) 
+)
+
+unseen_strategies_stats <- mark_group_and_total(unseen_strategies_stats, per_group,total_best_df )
+
+kable_table(unseen_strategies_stats, colnames=c("Description", trad_stat_name_vec), title=paste("\\label{trad_stats_unseen} Performance Metrics - ", unseen_str,"-",walk_forward_params_str ),
+			linesep=c("", "","\\addlinespace")
+			) %>% 
+ footnote(footnote_as_chunk = TRUE,
+           threeparttable = TRUE,
+           general_title = small_txt("Note:"),
+           general = small_txt(paste("Performance metrics for",unseen_strategies_desc_str , unseen_bold_explain_str ,unseen_test_description_str," ", transaction_cost_desc_str_tbl)),
+           fixed_small_size=TRUE,
+           escape = FALSE)
+
+
+```
+```{r equity_curve_unseen_data , echo=FALSE, fig.cap=paste("\\label{trad_stats_unseen} Equity Curves - ", unseen_str,"-",walk_forward_params_str ) , fig.topcaption=TRUE}
+merged_cumsum_xts <- params$unseen_equity_curves
+alpha <- 0.4
+alphaadd <- 0.6
+
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length=n+1)
+  hcl(h=hues, l=65, c=100)[1:n]
+}
+#custom_palette <-c("#474747" , "#606060" , "#7A7A7A" , "#919191" , "#A8A8A8" , "#BCBCBC" , "#CDCDCD" , "#DBDBDB" , "#E2E2E2")
+
+
+ggplot(merged_cumsum_xts) +
+  
+  geom_line(aes(x = index(merged_cumsum_xts), y = `BTC Train 7 Test 28`, colour = 'BTC Train 7 Test 28'), linetype="solid", alpha=alpha) +
+  geom_line(aes(x = index(merged_cumsum_xts), y = `BTC Train 14 Test 10`, colour = 'BTC Train 14 Test 10'),linetype="solid",alpha=alpha) +
+  geom_line(aes(x = index(merged_cumsum_xts), y = `ETH Train 7 Test 28`, colour = 'ETH Train 7 Test 28'),linetype="dashed",alpha=alpha) +
+  geom_line(aes(x = index(merged_cumsum_xts), y = `ETH Train 14 Test 10`, colour = 'ETH Train 14 Test 10'),linetype="dashed",alpha=alpha) +
+  geom_line(aes(x = index(merged_cumsum_xts), y = `Buy And Hold BTC`, colour = 'Buy-And-Hold BTC'),linetype="solid",alpha=alpha+alphaadd ) +
+  geom_line(aes(x = index(merged_cumsum_xts), y = `Buy And Hold ETH`, colour = 'Buy-And-Hold ETH'),linetype="dashed",alpha=alpha+alphaadd) +
+  
+  geom_line(aes(x = index(merged_cumsum_xts), y = `BNB Train 7 Test 28`, colour = 'BNB Train 7 Test 28'),linetype="dotted" ,alpha=alpha) +
+  geom_line(aes(x = index(merged_cumsum_xts), y = `BNB Train 14 Test 10`, colour = 'BNB Train 14 Test 10'),linetype="dotted",alpha=alpha) +
+geom_line(aes(x = index(merged_cumsum_xts), y = `Buy And Hold BNB`, colour = 'Buy-And-Hold BNB'),linetype="dotted",alpha=alpha+alphaadd ) +
+  #scale_colour_manual(values=custom_palette)+
+  theme_bw()+
+  theme(panel.border=element_blank(),legend.position=c(0,1),
+          legend.justification=c(0,1),
+        legend.title=element_blank())+
+		guides(col = guide_legend(ncol = 2))+
+  coord_trans(y ='log')+
+  xlab("Unseen data period") +
+  ylab("Cumulative return")  + 
+  theme(plot.caption =element_text(hjust = 0, size=6, margin=unit(c(10,0,0,0) , "pt"), lineheight=line_height, family="Times")	)+  
+  labs(caption = str_wrap(paste("Note: Equity curves for ", unseen_strategies_desc_str, unseen_test_description_str, " ",transaction_cost_desc_str_fig ),text_note_length))
+
+
+
+```
+
+## Results for portfolio of cryptocurrencies on unseen data
+
+```{r trading_stats_unseen, echo=FALSE}
+
+
+
+#%>%
+#mutate(
+	#annaulized_mean_return = cell_spec(annaulized_mean_return,align = "RIGHT", bold = ifelse( annaulized_mean_return == max(annaulized_mean_return), TRUE, FALSE))	
+#)  -> df_formatted
+
+
+#knitr::kable(format_metric_table(params$unseen_portfolio_stats),format = "latex", digits = 3 , escape = FALSE,col.names = linebreak(c("Description", trad_stat_name_vec), align="r"), 
+               #caption="Performance Metrics - ", row.names = F) %>% kable_styling("striped", full_width = T)
+
+df_formatted <- mark_min_max_trad_stats(params$unseen_portfolio_stats, style="bold")
+
+portfolio_desc_str <- "portfolios equal weights at inception: 1. Buy-and-hold portfolio - BTC, ETH, BNB equally weighted. 2. Portfolio - walk-forward strategy with training 7 days and testing 28 days - strategy applied to BTC, ETH, BNB equally weighted. 3. Portfolio - walk-forward strategy with training 14 days and testing 10 days -  applied to BTC, ETH, BNB equally weighted. 
+No rebalancing during the whole period."
+kable_table(df_formatted, colnames=c("Description", trad_stat_name_vec),title=paste("\\label{trad_stats_portfolio_unseen} Performance Metrics - ", unseen_str,"-",walk_forward_params_str , "- Portfolio"),
+					linesep=c("","\\addlinespace")
+			)  %>% 
+           footnote(general_title = small_txt("Note:"), 
+           footnote_as_chunk = TRUE,
+           threeparttable = TRUE,
+           general = small_txt(paste("Trading metrics for ",portfolio_desc_str, unseen_test_description_str, "The bolded values indicate the best metric within tree strategies", "  ", transaction_cost_desc_str_tbl)),
+           fixed_small_size=TRUE,		   
+           escape = FALSE)
+#
+
+```
+
+```{r equity_curve_portfolio_unseen , echo=FALSE}
+unseen_portfolio <- params$unseen_strategies_portfolio
+ggplot(unseen_portfolio) +
+  geom_line(aes(x = index(unseen_portfolio), y = `Portfolio_14_10`,colour="Portfolio Strategy 14 10" ), linetype="solid" )+
+  geom_line(aes(x = index(unseen_portfolio), y = `Portfolio_7_28`, colour="Portfolio Strategy 7 28"), linetype="dotted")+
+  geom_line(aes(x = index(unseen_portfolio), y = `Portfolio_Combined`, colour="Portfolio_Combined"), linetype="dotdash")+
+  geom_line(aes(x = index(unseen_portfolio), y = `Portfolio_Buy_Hold`, colour="Portfolio Buy And Hold"), linetype="dashed")+  
+  theme_bw()+
+  theme(panel.border=element_blank(),legend.position=c(0,1),
+          legend.justification=c(0,1),
+        legend.direction='vertical',legend.title=element_blank(),plot.caption = element_text(hjust = 0, size=6, margin=unit(c(10,0,0,0) , "pt"), family="Times", lineheight=1.5)			)+
+  xlab("Unseen data period") +ylab("Portfolios equity curves ") +   coord_trans(y ='log')+
+  labs(caption = str_wrap(paste("Note:","Equity curves for ", portfolio_desc_str, unseen_test_description_str, "  ", transaction_cost_desc_str_fig),text_note_length))
+
+```
+
+
+# Summary 
+# Conclusions

@@ -3,6 +3,8 @@ general:
   bootstrap_helper:         &bootstrap_helper dvc_pipeline/logic/bootstrap_helper.r
   seasonality_helper:         &seasonality_helper dvc_pipeline/logic/seasonality_helper.r
   
+  input_rmd:                &input_rmd                  rmd/wf_optim_crypto_charts_table.rmd
+  output_pdf:               &output_pdf                 wf_optim_crypto_charts_table.pdf
   train_strat_1_raw:        &train_strat_1_raw          data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_crash-taka\01_converted_to_xts.rds
   train_strat_1_result:     &train_strat_1_result       data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_crash-taka\09_wf_test_evalued.rds
   train_strat_1_metric:     &train_strat_1_metric       data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_crash-taka\metrics.yaml
@@ -117,6 +119,17 @@ general:
   input:  *train_strat_1_raw
   output: data_to_share\04_basic_asset_desc_tbl.rds
 
+05_trading_stats_per_tf:
+  script: dvc_pipeline/function_caller.r  
+  helper: dvc_pipeline/logic/analyse_helper.r
+  funs:
+    - readRDS
+    - get_trading_stats_per_tf
+    - saveRDS
+  args: 
+    - 30;60
+  input: data\8.7mln_1.5year\01_converted_to_xts.rds
+  output: data_to_share\05_trading_statistics_df.rds
 
 06_00_equity_curve_strategy_asset:
   dataset:
@@ -486,10 +499,13 @@ general:
     - get_trading_stats_per_col
     - saveRDS
   args:
-    - 24*365
-  #input file path to the result of strategy, this should be retrieved from csv file ontaining experiment for given combinations 
+    - 24*365  
   input: *train_strat_1_cost_sens
   output: *train_strat_1_cost_sens_stats
 
-  
+16_save_charts_tables:
+  script: rmd/Construct_rmd.r
+  input: *input_rmd
+  output: *output_pdf
+
 

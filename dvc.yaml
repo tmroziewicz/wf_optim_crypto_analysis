@@ -46,6 +46,20 @@ stages:
     params:
     - 04_basic_stats_per_tf
     - general
+    
+  05_trading_stats_per_tf:
+    cmd: rscript ${05_trading_stats_per_tf.script}  --inputfile  ${05_trading_stats_per_tf.input} --output ${05_trading_stats_per_tf.output}  --helper ${05_trading_stats_per_tf.helper}  --funs ${05_trading_stats_per_tf.funs[0]},${05_trading_stats_per_tf.funs[1]},${05_trading_stats_per_tf.funs[2]}  --args ${05_trading_stats_per_tf.args[0]} 
+    deps:
+    - ${04_basic_stats_per_tf.input}
+    - ${04_basic_stats_per_tf.script}    
+    - ${general.analyse_helper}
+    outs:
+    - ${05_trading_stats_per_tf.output}    
+    params:
+    - 05_trading_stats_per_tf
+    - 04_basic_stats_per_tf
+    - general
+  
  
   06_00_equity_curve_strategy_asset:
     foreach: ${06_00_equity_curve_strategy_asset.dataset}
@@ -275,3 +289,7 @@ stages:
     - 15_01_trading_stats_cost_sens    
     - general   
 
+  16_save_charts_tables:
+    cmd: rscript  ${16_save_charts_tables.script} --inputfile  ${16_save_charts_tables.input} --output ${16_save_charts_tables.output}
+    outs:
+    -  ${16_save_charts_tables.output}
