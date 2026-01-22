@@ -18,7 +18,7 @@ smooth_matrix_debug <- function( matx.df, stat.name ) {
 smooth_matrix <- function( matx.df, stat.name ) {
   print(head(matx.df))
   print(stat.name)
-  matx.df <- as.data.frame(dcast(as.data.table(matx.df),  wf.test_length ~ wf.train_length,value.var = stat.name))
+  matx.df <- as.data.frame(dcast(as.data.table(matx.df),  wf.test_length ~ wf.train_length,value.var = stat.name))  
   orginal_colnames <- as.numeric(colnames(matx.df)[2:ncol(matx.df)])
   orginal_rownames <- matx.df[,1]
   
