@@ -1,6 +1,6 @@
 general:
   WF_CRYPTO_REPO:    ..\\wf_optim_crypto
-  global_trainig_exps: &global_trainig_exps data\global_training_period_results\20260109_exp_global_train_unseen.csv
+  global_trainig_exps: &global_trainig_exps data\global_training_period_results\20260113_exp_global_train_unseen.csv
   function_caller:   &function_caller scripts/function_caller.r
   analyse_helper:    &analyse_helper scripts/analyse_helper.r
   bootstrap_helper:         &bootstrap_helper scripts/bootstrap_helper.r
@@ -81,12 +81,12 @@ general:
     - saveRDS
   args:
     - noarg
-  input: data\global_training_period_results\global_trainig_period_wf_dvc_results.csv
+  input: *global_trainig_exps
   output: output\01_sharpe_heatmap.rds
   
 02_smooth_heatmap:
   script: *function_caller  
-  helper: scripts/smooth-matrix.R
+  helper: scripts/smooth_matrix.R
   funs:
     - readRDS
     - smooth_matrix

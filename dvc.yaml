@@ -6,6 +6,7 @@ stages:
     deps:
     - ${01_generate_heatmap.input}
     - ${01_generate_heatmap.script}    
+    - ${01_generate_heatmap.helper}
     outs:
     - ${01_generate_heatmap.output}    
     params:
