@@ -10,8 +10,10 @@ source(paste0(WF_CRYPTO_REPO,"\\master\\rcode\\logic\\helpers\\datetime_helper.r
 source(paste0(WF_CRYPTO_REPO,"\\master\\rcode\\logic\\helpers\\data_helper.r"))
 
 generate_heatmap <- function(experiment_df) {
-  experiment_df %>% filter(rev != "workspace" &  rev != "main" & typ !="baseline" &   grepl("global_train", general.raw_data)) %>% select( general.tfmin, general.performance_stat,sharpe_ratio,ir2,sortino_ratio, wf.train_length,wf.test_length ) -> exps_df
-  sharpe_heatmap.df <- exps_df %>% filter( general.performance_stat == "sharpe" )
+  print(head(experiment_df))
+  experiment_df %>% filter(general.tfmin ==60 & rev != "workspace" &  rev != "main" & typ !="baseline" &   grepl("global_train", general.raw_data)) %>% select( general.tfmin, general.performance_stat,sharpe_ratio,ir2,sortino_ratio, wf.train_length,wf.test_length ) -> exps_df
+  sharpe_heatmap.df <- exps_df %>% filter( general.performance_stat == "sharpe" ) %>% distinct(wf.train_length, wf.test_length, sharpe_ratio, .keep_all = TRUE)
+  print(head(sharpe_heatmap.df))
   return(sharpe_heatmap.df)  
 }
 
