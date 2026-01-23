@@ -1,7 +1,7 @@
 library(xts)
 library(dplyr) 
 library(PerformanceAnalytics)
-#library(psych)
+library(psych)
 library(tseries)
 source("config.r")
 
