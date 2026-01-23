@@ -736,34 +736,52 @@ gg_color_hue <- function(n) {
   hcl(h=hues, l=65, c=100)[1:n]
 }
 #custom_palette <-c("#474747" , "#606060" , "#7A7A7A" , "#919191" , "#A8A8A8" , "#BCBCBC" , "#CDCDCD" , "#DBDBDB" , "#E2E2E2")
+# 1. Reshape data and pre-calculate Alpha
+df_plot <- merged_cumsum_xts %>%
+  as.data.frame() %>%
+  mutate(Date = index(merged_cumsum_xts)) %>%
+  pivot_longer(cols = -Date, names_to = "Series", values_to = "Value") %>%
+  mutate(
+    # Assign Alpha: 'Buy And Hold' gets extra, others get base alpha
+    Alpha_Val = ifelse(grepl("Buy And Hold", Series), alpha + alphaadd, alpha)
+  )
 
+# 2. Define the Linetype mapping (BTC = solid, ETH = dashed, BNB = dotted)
+unique_series <- unique(df_plot$Series)
+line_map <- setNames(
+  case_when(
+    grepl("BTC", unique_series) ~ "solid",
+    grepl("ETH", unique_series) ~ "dashed",
+    grepl("BNB", unique_series) ~ "dotted",
+    TRUE ~ "solid"
+  ),
+  unique_series
+)
 
-ggplot(merged_cumsum_xts) +
+# 3. Plotting
+ggplot(df_plot, aes(x = Date, y = Value, color = Series, linetype = Series)) +
+  geom_line(aes(alpha = Alpha_Val), size = 0.7) +
   
-  geom_line(aes(x = index(merged_cumsum_xts), y = `BTC Train 7 Test 28`, colour = 'BTC Train 7 Test 28'), linetype="solid", alpha=alpha) +
-  geom_line(aes(x = index(merged_cumsum_xts), y = `BTC Train 14 Test 10`, colour = 'BTC Train 14 Test 10'),linetype="solid",alpha=alpha) +
-  geom_line(aes(x = index(merged_cumsum_xts), y = `ETH Train 7 Test 28`, colour = 'ETH Train 7 Test 28'),linetype="dashed",alpha=alpha) +
-  geom_line(aes(x = index(merged_cumsum_xts), y = `ETH Train 14 Test 10`, colour = 'ETH Train 14 Test 10'),linetype="dashed",alpha=alpha) +
-  geom_line(aes(x = index(merged_cumsum_xts), y = `Buy And Hold BTC`, colour = 'Buy-And-Hold BTC'),linetype="solid",alpha=alpha+alphaadd ) +
-  geom_line(aes(x = index(merged_cumsum_xts), y = `Buy And Hold ETH`, colour = 'Buy-And-Hold ETH'),linetype="dashed",alpha=alpha+alphaadd) +
+  # Set manual scales
+  scale_linetype_manual(values = line_map) +
+  scale_alpha_identity() +
   
-  geom_line(aes(x = index(merged_cumsum_xts), y = `BNB Train 7 Test 28`, colour = 'BNB Train 7 Test 28'),linetype="dotted" ,alpha=alpha) +
-  geom_line(aes(x = index(merged_cumsum_xts), y = `BNB Train 14 Test 10`, colour = 'BNB Train 14 Test 10'),linetype="dotted",alpha=alpha) +
-geom_line(aes(x = index(merged_cumsum_xts), y = `Buy And Hold BNB`, colour = 'Buy-And-Hold BNB'),linetype="dotted",alpha=alpha+alphaadd ) +
-  #scale_colour_manual(values=custom_palette)+
-  theme_bw()+
-  theme(panel.border=element_blank(),legend.position=c(0,1),
-          legend.justification=c(0,1),
-        legend.title=element_blank())+
-		guides(col = guide_legend(ncol = 2))+
-  coord_trans(y ='log')+
-  xlab("Unseen data period") +
-  ylab("Cumulative return")  + 
-  theme(plot.caption =element_text(hjust = 0, size=6, margin=unit(c(10,0,0,0) , "pt"), lineheight=line_height, family="Times")	)+  
-  labs(caption = str_wrap(paste("Note: Equity curves for ", unseen_strategies_desc_str, unseen_test_description_str, " ",transaction_cost_desc_str_fig ),text_note_length))
-
-
-
+  # Transformation and Labels
+  coord_trans(y = 'log') +
+  labs(x = "Unseen data period", y = "Cumulative return", caption = str_wrap(paste("Note:...", unseen_test_description_str), 80)) +
+  
+  # Theme and Legend Fixes
+  theme_bw() +
+  theme(
+    panel.border = element_blank(),
+    legend.position = "top",           # Move to top to avoid overlapping data
+    legend.title = element_blank(),
+    legend.text = element_text(size = 7), # Slightly smaller text to prevent clipping
+    legend.key.width = unit(1.2, "cm"), # Make legend keys wider so dashes/dots are visible
+    plot.margin = margin(t = 10, r = 20, b = 10, l = 10) # Add right margin padding
+  ) +
+  # Use 3 columns to ensure all text fits horizontally
+  guides(color = guide_legend(ncol = 3), linetype = guide_legend(ncol = 3))
 ```
 
 ## Results for portfolio of cryptocurrencies on unseen data
