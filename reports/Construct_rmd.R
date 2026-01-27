@@ -42,24 +42,24 @@ total_start <- "2018-01-01"
 total_end <-"2021-09-12"
 total_date_filter <- paste0(total_start,"/",total_end)
 
-data_path_str <- here("data_to_share")
+data_path_str <- here("output")
 
 #---- bitcoin price
-btc_df <- read.csv(file.path(data_path_str,"btcusd_d.csv"))
+btc_df <- read.csv(here("data","btcusd_d.csv"))
 equity_curve_xts       <- 			readRDS(here(data_path_str,"06_merged_equity_curve_xts.rds"))
 #experiment_df             <- 		readRDS(here(data_path_str,"experiment_df.rds"))
 sharpe_heatmap.df         <- 		readRDS(here(data_path_str,"01_sharpe_heatmap.rds"))
 #simple_experiment_df      <- 		readRDS(here(data_path_str,"simple_experiment_df.rds"))
 smoothed.df               <- 		readRDS(here(data_path_str,"02_smoothed_heatmap.rds"))
-mean_sharpe_per_tf_df     <- 		readRDS(here(data_path_str,"mean_sharpe_per_tf_df.rds"))
+mean_sharpe_per_tf_df     <- 		readRDS(here(data_path_str,"03_mean_sharpe_per_tf_df.rds"))
 
 
 #modify  mean_sharpe_per_tf_df updating with values 60 
 mean_sharpe_per_tf_60min.df <- sharpe_heatmap.df %>%  summarise(mean.sharpe.per.tfmin = mean(sharpe_ratio), max.sharpe.per.tfmin = max(sharpe_ratio), min.sharpe.per.tfmin = min(sharpe_ratio), std.sharpe.per.tfmin = sd(sharpe_ratio),  quantile_25 = quantile(sharpe_ratio, probs=0.25 ), quantile_50 = quantile(sharpe_ratio, probs=0.50 ), quantile_75 = quantile(sharpe_ratio, probs=0.75 ))
 
-mean_sharpe_per_tf_df <- bind_rows(
-  mean_sharpe_per_tf_df%>%filter(!general.tfmin==60),
-bind_cols(general.tfmin=60,mean_sharpe_per_tf_60min.df ) )
+#mean_sharpe_per_tf_df <- bind_rows(
+  #mean_sharpe_per_tf_df%>%filter(!general.tfmin==60),
+#bind_cols(general.tfmin=60,mean_sharpe_per_tf_60min.df ) )
 
 
 
@@ -191,7 +191,7 @@ sprintf("dasfd %s dfdf", "str")
 
 
 rename_cols_in_equity_curve <- function(equity_curve_xts, col_names ) {
-  colnames(equity_curve_xts  ) <- c(col_names[1],"Buy And Hold BTC", col_names[2], "" )
+  colnames(equity_curve_xts  ) <- c(as.character(col_names[1]),"Buy And Hold BTC", as.character(col_names[2]), "" )
   return (equity_curve_xts[,1:ncol(equity_curve_xts)-1])
 }
 

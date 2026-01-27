@@ -737,51 +737,64 @@ gg_color_hue <- function(n) {
 }
 #custom_palette <-c("#474747" , "#606060" , "#7A7A7A" , "#919191" , "#A8A8A8" , "#BCBCBC" , "#CDCDCD" , "#DBDBDB" , "#E2E2E2")
 # 1. Reshape data and pre-calculate Alpha
+library(tidyverse)
+library(xts)
+
+# 1. Transform to Long Format
 df_plot <- merged_cumsum_xts %>%
   as.data.frame() %>%
   mutate(Date = index(merged_cumsum_xts)) %>%
   pivot_longer(cols = -Date, names_to = "Series", values_to = "Value") %>%
   mutate(
-    # Assign Alpha: 'Buy And Hold' gets extra, others get base alpha
-    Alpha_Val = ifelse(grepl("Buy And Hold", Series), alpha + alphaadd, alpha)
+    # Handle the specific alpha logic for "Buy And Hold"
+    Alpha_Val = ifelse(grepl("Buy-And-Hold", Series), alpha + alphaadd, alpha)
   )
 
-# 2. Define the Linetype mapping (BTC = solid, ETH = dashed, BNB = dotted)
-unique_series <- unique(df_plot$Series)
+# 2. Create the Linetype Mapping Logic
+# This ensures any series with "BTC" is solid, "ETH" is dashed, and "BNB" is dotted
+series_names <- unique(df_plot$Series)
 line_map <- setNames(
   case_when(
-    grepl("BTC", unique_series) ~ "solid",
-    grepl("ETH", unique_series) ~ "dashed",
-    grepl("BNB", unique_series) ~ "dotted",
+    grepl("BTC", series_names) ~ "solid",
+    grepl("ETH", series_names) ~ "dashed",
+    grepl("BNB", series_names) ~ "dotted",
     TRUE ~ "solid"
   ),
-  unique_series
+  series_names
 )
 
-# 3. Plotting
+# 3. Plot
 ggplot(df_plot, aes(x = Date, y = Value, color = Series, linetype = Series)) +
-  geom_line(aes(alpha = Alpha_Val), size = 0.7) +
+  geom_line(aes(alpha = Alpha_Val)) + 
   
-  # Set manual scales
+  # Map linetypes and hide the alpha legend
   scale_linetype_manual(values = line_map) +
   scale_alpha_identity() +
   
-  # Transformation and Labels
+  # Log scale as per your requirement
   coord_trans(y = 'log') +
-  labs(x = "Unseen data period", y = "Cumulative return", caption = str_wrap(paste("Note:...", unseen_test_description_str), 80)) +
   
-  # Theme and Legend Fixes
   theme_bw() +
   theme(
     panel.border = element_blank(),
-    legend.position = "top",           # Move to top to avoid overlapping data
+    # Position: c(0, 1) is bottom-left/top-right relative to the legend box
+    # We use small offsets (0.02, 0.98) to keep it just off the axes
+    legend.position = c(0.01, 0.99), 
+    legend.justification = c(0, 1),
     legend.title = element_blank(),
-    legend.text = element_text(size = 7), # Slightly smaller text to prevent clipping
-    legend.key.width = unit(1.2, "cm"), # Make legend keys wider so dashes/dots are visible
-    plot.margin = margin(t = 10, r = 20, b = 10, l = 10) # Add right margin padding
+    legend.background = element_rect(fill = scales::alpha("white", 0.5)), # Semi-transparent box
+    legend.text = element_text(size = 8),                          # Shrink text to fit
+    legend.key.width = unit(1.5, "cm"),                            # Make lines longer to see patterns
+    plot.caption = element_text(hjust = 0, size = 6, family = "Times", lineheight = line_height)
   ) +
-  # Use 3 columns to ensure all text fits horizontally
-  guides(color = guide_legend(ncol = 3), linetype = guide_legend(ncol = 3))
+  # Force 2 columns to keep the legend from getting too tall or wide
+  guides(color = guide_legend(ncol = 2), linetype = guide_legend(ncol = 2)) +
+  
+  labs(
+    x = "Unseen data period",
+    y = "Cumulative return",
+    caption =  str_wrap(paste("Note: Equity curves for ", unseen_strategies_desc_str, unseen_test_description_str, " ",transaction_cost_desc_str_fig ),text_note_length)
+  )
 ```
 
 ## Results for portfolio of cryptocurrencies on unseen data
