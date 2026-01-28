@@ -38,14 +38,14 @@ You can choose or install dependencies manually in R/Python, or use Anaconda pac
 
 ### Manual installation 
 
-**Python**: version 3.9.10 or higher.
-**DVC**: version 3.10 or higher. Install via 
+- **Python**: version 3.9.10 or higher.
+- **DVC**: version 3.10 or higher. Install via 
 ```bash
 pip install dvc
 ```
-**R**: version 3.6 or higher.
-**R packages** 
-**Miktex**  as PDF is the result, Pdflatex is needed,
+- **R**: version 3.6 or higher.
+- **R packages** 
+- **Miktex**  as PDF is the result, Pdflatex is needed,
 
 ### Package manager installation - Conda Environment Setup (Prerequisites)
 To ensure everyone gets the **exact same versions** of Python, libraries, and dependencies (critical for reproducing research results), 
@@ -67,9 +67,9 @@ If you changed the environment name in the YAML file, replace `wf_optim` with th
 conda activate wf_optim
 ```
 3. **Miktex**  as PDF is the result, Pdflatex is needed, standalone installation is required as Miktex delivered as Anaconda package was not compatible with this project
-	- During Miktex installation choose  following options 
-			- Install for all users 
-			- Enable Install missing packages on-the-fly 
+- During Miktex installation choose  following options 
+	- Install for all users 
+	- Enable Install missing packages on-the-fly 
 
 
 ## How to reproduce results presented in the paper
