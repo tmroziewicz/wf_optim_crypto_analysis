@@ -22,8 +22,6 @@ This research is fully reproducible using **[Data Version Control (DVC)](https:/
 - `params.yaml` — contains all configurable hyperparameters and settings
 - `dvc.lock` — locks exact versions of data, models, metrics, and code outputs
 
-
-
 ## Repository Structure
 - **data**: Contains result of walk forward optimization, data could be regenerated using DVC project stored in the wf_optim_crypto
 - **reports** script for generating actual pdf 
@@ -35,20 +33,21 @@ This research is fully reproducible using **[Data Version Control (DVC)](https:/
 
 
 
-#Prerequistits 
+##Prerequistits 
 You can choose or install dependencies manually in R/Python, or use Anaconda package manager to ensure all prerequisites are installed
 
-## Manual installation 
+### Manual installation 
 
 **Python**: version 3.9.10 or higher.
 **DVC**: version 3.10 or higher. Install via 
 ```bash
 pip install dvc
+```
 **R**: version 3.6 or higher.
 **R packages** 
 **Miktex**  as PDF is the result, Pdflatex is needed,
 
-## Package manager - Conda Environment Setup (Prerequisites)
+### Package manager installation - Conda Environment Setup (Prerequisites)
 To ensure everyone gets the **exact same versions** of Python, libraries, and dependencies (critical for reproducing research results), 
 use **Conda** to create an isolated environment from the provided YAML file.
 
@@ -60,7 +59,7 @@ use **Conda** to create an isolated environment from the provided YAML file.
 
 ```bash
 conda env create -f wf_optim_conda.yaml
-
+```
 After the environment is created, verify that it can be activated.
 If you changed the environment name in the YAML file, replace `wf_optim` with the new name:
 
