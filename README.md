@@ -84,7 +84,10 @@ Results of research presented in the paper could be reproduced in form PDF conta
 - Download data from https://drive.google.com/drive/folders/1HAYX3iUfO5ewWXlWK0MbOAu9HQ4l6Zzr
 	Note: Alternatively  you can generate all data by yourself using wf_optim_crypto, this will perform walk forward analysis.
 - Unzip downloaded file into data folder, make sure that data folder has structure as zip 
-- Execute dvc pipeline where all execution will be performed:  dvc repro --force 
+- Execute dvc pipeline where all execution will be performed:
+  ```
+  dvc repro --force
+  ```
 - When command finished 
-	- open file in the outupf\wf_optim_crypto_charts_table.pdf , file contains all charts and tables from research
+	- open file in the `output\wf_optim_crypto_charts_table.pdf` , file contains all charts and tables from research
 	- output folder contains also intermediate data in form or *.rds files used for generating the content 
