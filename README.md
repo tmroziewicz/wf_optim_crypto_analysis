@@ -66,7 +66,7 @@ If you changed the environment name in the YAML file, replace `wf_optim` with th
 
 ```bash
 conda activate wf_optim
-
+```
 3. **Miktex**  as PDF is the result, Pdflatex is needed, standalone installation is required as Miktex delivered as Anaconda package was not compatible with this project
 	- During Miktex installation choose  following options 
 			- Install for all users 
