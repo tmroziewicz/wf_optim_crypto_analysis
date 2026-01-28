@@ -77,10 +77,16 @@ This research is fully reproducible using **[Data Version Control (DVC)](https:/
 
 ## How to reproduce results presented in the paper
 Results of research presented in the paper could be reproduced in form PDF containing tables and charts. Follow procdure:
-- Clone this repository git clone https://github.com/tmroziewicz/wf_optim_crypto_analysis wf_optim_crypto_analysis
-- Clone depended repository git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
+- Clone this repository
+  ```
+  git clone https://github.com/tmroziewicz/wf_optim_crypto_analysis wf_optim_crypto_analysis
+  ```
+- Clone depended repository
+ ```
+  git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
+ ```
 - Navigate to repository cd wf_optim_crypto_analysis
-- Configure WF_CRYPTO_REPO path inside config.r where  wf_optim_crypto is located
+- Configure `WF_CRYPTO_REPO` path inside `config.r` where  wf_optim_crypto is located
 - Download data from https://drive.google.com/drive/folders/1HAYX3iUfO5ewWXlWK0MbOAu9HQ4l6Zzr
 	Note: Alternatively  you can generate all data by yourself using wf_optim_crypto, this will perform walk forward analysis.
 - Unzip downloaded file into data folder, make sure that data folder has structure as zip 
@@ -90,4 +96,4 @@ Results of research presented in the paper could be reproduced in form PDF conta
   ```
 - When command finished 
 	- open file in the `output\wf_optim_crypto_charts_table.pdf` , file contains all charts and tables from research
-	- output folder contains also intermediate data in form or *.rds files used for generating the content 
+	- output folder contains also intermediate data in form or `*.rds` files used for generating the content 
