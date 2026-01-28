@@ -25,8 +25,8 @@ authors :
 - **params.yaml**: defines all parameters used by `dvc.yaml`
 - **README.md**: this file
 
-## Prerequistits
-You can choose or install dependencies manually in R/Python, or use Anaconda package manager to ensure all prerequisites are installed
+## Prerequisite 
+You can either install R/Python dependencies manually or use Anaconda to install all prerequisites at once.
 
 ### Option 1 - Manual installation 
 Project need following  
