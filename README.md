@@ -14,7 +14,6 @@ authors :
 - Tomasz Mroziewicz  ORCID: https://orcid.org/0009-0003-6540-6554, email: t.mroziewic2@student.uw.edu.pl
 - Robert Ślepaczuk   ORCID: https://orcid.org/0000-0001-5227-2014, corresponding author: rslepaczuk@wne.uw.edu.pl 
 
-
 ## Repository Structure
 - **conda_env/wf_optim_conda.yaml**: configuration file for creating the Anaconda environment
 - **data/**: empty in git, but it should contains results of the walk-forward optimization; data can be regenerated using the DVC project in `wf_optim_crypto`, or downloaded from Google Drive link below
@@ -26,10 +25,7 @@ authors :
 - **params.yaml**: defines all parameters used by `dvc.yaml`
 - **README.md**: this file
 
-
-
-
-##Prerequistits 
+## Prerequistits
 You can choose or install dependencies manually in R/Python, or use Anaconda package manager to ensure all prerequisites are installed
 
 ### Option 1 - Manual installation 
@@ -40,7 +36,7 @@ Project need following
 ```bash
 pip install dvc
 ```
-- **Miktex**  as PDF is the result, Pdflatex is needed, standalone installation is required as Miktex delivered as Anaconda package was not compatible with this project
+- **Miktex**: required for PDF output (`pdflatex`); a standalone installation is required, as the MiKTeX package distributed via Anaconda is not compatible with this project.
 	- During Miktex installation choose  following options 
 		- Install for all users 
 		- Enable Install missing packages on-the-fly 
@@ -64,9 +60,9 @@ If you changed the environment name in the YAML file, replace `wf_optim` with th
 ```bash
 conda activate wf_optim
 ```
-3. **Miktex** same procedure as above for manul installation 
+3. **Miktex** same procedure as above for manual installation 
 
-##DVC
+## DVC
 This research is fully reproducible using **[Data Version Control (DVC)](https://dvc.org/)** — an open-source tool for versioning data, models, experiments, and machine learning pipelines.
 
 ### Key DVC files
@@ -74,21 +70,20 @@ This research is fully reproducible using **[Data Version Control (DVC)](https:/
 - `params.yaml` — contains all configurable hyperparameters and settings
 - `dvc.lock` — locks exact versions of data, models, metrics, and code outputs
 
-
 ## How to reproduce results presented in the paper
 Results of research presented in the paper could be reproduced in form PDF containing tables and charts. Follow procdure:
 - Clone this repository
   ```
   git clone https://github.com/tmroziewicz/wf_optim_crypto_analysis wf_optim_crypto_analysis
   ```
-- Clone depended repository
- ```
+- Clone depended repositor
+  ```
   git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
- ```
+  ```
 - Navigate to repository cd wf_optim_crypto_analysis
 - Configure `WF_CRYPTO_REPO` path inside `config.r` where  wf_optim_crypto is located
 - Download data from https://drive.google.com/drive/folders/1HAYX3iUfO5ewWXlWK0MbOAu9HQ4l6Zzr
-	Note: Alternatively  you can generate all data by yourself using wf_optim_crypto, this will perform walk forward analysis.
+	- **Note**: Alternatively  you can generate all data by yourself using wf_optim_crypto, this will perform walk forward analysis.
 - Unzip downloaded file into data folder, make sure that data folder has structure as zip 
 - Execute dvc pipeline where all execution will be performed:
   ```
