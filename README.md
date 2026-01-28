@@ -14,40 +14,38 @@ authors :
 - Tomasz Mroziewicz  ORCID: https://orcid.org/0009-0003-6540-6554, email: t.mroziewic2@student.uw.edu.pl
 - Robert Ślepaczuk   ORCID: https://orcid.org/0000-0001-5227-2014, corresponding author: rslepaczuk@wne.uw.edu.pl 
 
-##DVC
-This research is fully reproducible using **[Data Version Control (DVC)](https://dvc.org/)** — an open-source tool for versioning data, models, experiments, and machine learning pipelines.
-
-### Key files
-- `dvc.yaml` — defines the complete pipeline (stages, dependencies, outputs, commands)
-- `params.yaml` — contains all configurable hyperparameters and settings
-- `dvc.lock` — locks exact versions of data, models, metrics, and code outputs
 
 ## Repository Structure
-- **data**: Contains result of walk forward optimization, data could be regenerated using DVC project stored in the wf_optim_crypto
-- **reports** script for generating actual pdf 
-- **experiments/**: Each experiment is stored in its own self-contained branch to keep the history clean.
-- dvc.yaml all procesing steps are defined 
-- params.yaml all params used by dvc.yaml are defined
-- config.r file containing location of wf_optim_crypto
-- wf_optim_conda.yaml - file containing configuration file to create Anaconda environment 
+- **conda_env/wf_optim_conda.yaml**: configuration file for creating the Anaconda environment
+- **data/**: empty in git, but it should contains results of the walk-forward optimization; data can be regenerated using the DVC project in `wf_optim_crypto`, or downloaded from Google Drive link below
+- **output/**: all generated data stored as `.rds` files and the final PDF
+- **reports/**: scripts for generating the final PDF
+- **scripts/**: R scripts used by DVC pipeline
+- **config.r**: contains the path to another project `wf_optim_crypto`
+- **dvc.yaml**: defines all data processing steps
+- **params.yaml**: defines all parameters used by `dvc.yaml`
+- **README.md**: this file
+
 
 
 
 ##Prerequistits 
 You can choose or install dependencies manually in R/Python, or use Anaconda package manager to ensure all prerequisites are installed
 
-### Manual installation 
-
+### Option 1 - Manual installation 
+Project need following  
 - **Python**: version 3.9.10 or higher.
+- **R**: version 3.6 or higher.
 - **DVC**: version 3.10 or higher. Install via 
 ```bash
 pip install dvc
 ```
-- **R**: version 3.6 or higher.
-- **R packages** 
-- **Miktex**  as PDF is the result, Pdflatex is needed,
+- **Miktex**  as PDF is the result, Pdflatex is needed, standalone installation is required as Miktex delivered as Anaconda package was not compatible with this project
+	- During Miktex installation choose  following options 
+		- Install for all users 
+		- Enable Install missing packages on-the-fly 
 
-### Package manager installation - Conda Environment Setup (Prerequisites)
+### Option 2 - Package manager installation - Conda Environment Setup
 To ensure everyone gets the **exact same versions** of Python, libraries, and dependencies (critical for reproducing research results), 
 use **Conda** to create an isolated environment from the provided YAML file.
 
@@ -66,10 +64,15 @@ If you changed the environment name in the YAML file, replace `wf_optim` with th
 ```bash
 conda activate wf_optim
 ```
-3. **Miktex**  as PDF is the result, Pdflatex is needed, standalone installation is required as Miktex delivered as Anaconda package was not compatible with this project
-- During Miktex installation choose  following options 
-	- Install for all users 
-	- Enable Install missing packages on-the-fly 
+3. **Miktex** same procedure as above for manul installation 
+
+##DVC
+This research is fully reproducible using **[Data Version Control (DVC)](https://dvc.org/)** — an open-source tool for versioning data, models, experiments, and machine learning pipelines.
+
+### Key DVC files
+- `dvc.yaml` — defines the complete pipeline (stages, dependencies, outputs, commands)
+- `params.yaml` — contains all configurable hyperparameters and settings
+- `dvc.lock` — locks exact versions of data, models, metrics, and code outputs
 
 
 ## How to reproduce results presented in the paper
