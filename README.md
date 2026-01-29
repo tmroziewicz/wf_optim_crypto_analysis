@@ -16,6 +16,8 @@ The project relies on a modular setup where data generation and data processing 
 
 - Execution: All statistical computations and visualizations are performed using R.
 
+📊 Main Output
+The primary result of this pipeline is a reproduced PDF document. This document contains charts and tables that are numerically and visually identical to those published in the original paper.
 
 ## Clone 
 - Clone this repository
@@ -26,11 +28,26 @@ The project relies on a modular setup where data generation and data processing 
   ```
   git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
   ```
-## Data
-There are 2 options for having data which are used by pipeline:
-- easier: download trading data calculated during research from (https://drive.google.com/drive/folders/1HAYX3iUfO5ewWXlWK0MbOAu9HQ4l6Zzr) and copy it to `wf_optim_crypto_analysis\data`
-- more difficult: reproduced by using another project `wf_optim_crypto` and then copy it to `wf_optim_crypto_analysis\data`
+## Data Acquisition
+To run this pipeline, you need the underlying trading data located in the wf_optim_crypto_analysis\data directory. You can obtain this data using one of two methods:
 
+**Option 1**: Direct Download (Recommended)
+- This is the fastest way to get started using the exact datasets used in the original research.
+
+- Download the pre-calculated trading data from this Google Drive Folder.
+
+- Extract/Copy the files into the following directory: wf_optim_crypto_analysis\data
+
+**Option 2**: Full Reproduction
+- Choose this option if you wish to audit the data generation process or modify the underlying trading logic.
+
+- Clone and run the wf_optim_crypto repository.
+
+- Generate the datasets according to that project's instructions.
+
+- Transfer the resulting output files to: wf_optim_crypto_analysis\data
+
+  
 ## Repository Structure
 - **conda_env/wf_optim_conda.yaml**: configuration file for creating the Anaconda environment
 - **data/**: empty in git, but it should contains results of the walk-forward optimization; data can be regenerated using the DVC project in `wf_optim_crypto`, or downloaded from Google Drive (link above) 
