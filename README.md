@@ -8,7 +8,15 @@ authors :
 This repository reproduces the tables and charts presented in the paper,  trading data generation is handled in a separate project `wf_optim_crypto`.
 All orchestration and of calculations and data flow  is handled using **[Data Version Control (DVC)](https://dvc.org/)** — an open-source tool for versioning data, models, experiments, and machine learning pipelines. 
 Actuall calculations is done in R. Main result produced by this pipeline is PDF with identical charts and tables as in the paper. 
-
+## Clone 
+- Clone this repository
+  ```
+  git clone https://github.com/tmroziewicz/wf_optim_crypto_analysis wf_optim_crypto_analysis
+  ```
+- Clone depended repositor
+  ```
+  git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
+  ```
 ## Data
 There are 2 options for having data which are used by pipeline:
 - easier: download trading data calculated during research from (https://drive.google.com/drive/folders/1HAYX3iUfO5ewWXlWK0MbOAu9HQ4l6Zzr) and copy it to `wf_optim_crypto_analysis\data`
@@ -76,14 +84,6 @@ Results of research presented in the paper could be reproduced in form PDF conta
 - Activate environment `wf_optim` (or your name if you changed it) created in prerequistits
   ```
   conda activate wf_optim
-  ```
-- Clone this repository
-  ```
-  git clone https://github.com/tmroziewicz/wf_optim_crypto_analysis wf_optim_crypto_analysis
-  ```
-- Clone depended repositor
-  ```
-  git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
   ```
 - Navigate to folder where repository was cloned `wf_optim_crypto_analysis`
 - If both cloned projects folders are located in the same folder, you can skip that step. If folders has different location change `WF_CRYPTO_REPO` path inside `config.r` where  `wf_optim_crypto` is located. 
