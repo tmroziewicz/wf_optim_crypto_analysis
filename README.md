@@ -5,9 +5,18 @@ authors :
 
 
 ## Overview
-This repository reproduces the tables and charts presented in the paper,  trading data generation is handled in a separate project `wf_optim_crypto`.
-All orchestration and of calculations and data flow  is handled using **[Data Version Control (DVC)](https://dvc.org/)** — an open-source tool for versioning data, models, experiments, and machine learning pipelines. 
-Actuall calculations is done in R. Main result produced by this pipeline is PDF with identical charts and tables as in the paper. 
+This repository contains the reproduction code for the tables and charts presented in our paper. It is designed to ensure computational transparency and replicability of our findings.
+
+🛠 System Architecture
+The project relies on a modular setup where data generation and data processing are decoupled:
+
+- Upstream Data: Trading data generation is managed in the external wf_optim_crypto project.
+
+- Orchestration: We use Data Version Control (DVC) to manage the data flow, calculation dependencies, and experiment versioning.
+
+- Execution: All statistical computations and visualizations are performed using R.
+
+
 ## Clone 
 - Clone this repository
   ```
