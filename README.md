@@ -131,7 +131,7 @@ use **Conda** to create an isolated environment from the provided YAML file.
 ## How to Reproduce Results
 Results from the paper can be fully reproduced as a PDF containing all original tables and charts. Follow this procedure:
 
-- 🐍 Open Anaconda Prompt: Activate the environment created in the prerequisites:
+- 🐍 Open Anaconda Prompt: (Skip this if you chose manual installation). Activate the environment created in the prerequisites:
 
 ```
 conda activate wf_optim
