@@ -51,13 +51,10 @@ params:
   
 header-includes:
 - \usepackage{booktabs}
-- \usepackage{longtable}
-- \usepackage{array}
 - \usepackage{multirow}
 - \usepackage{wrapfig}
 - \usepackage{colortbl}
 - \usepackage{pdflscape}
-- \usepackage{tabu}
 - \usepackage{threeparttable}
 - \usepackage{threeparttablex}
 - \usepackage[normalem]{ulem}
