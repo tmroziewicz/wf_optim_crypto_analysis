@@ -19,6 +19,18 @@ The project relies on a modular setup where data generation and data processing 
 📊 Main Output
 The primary result of this pipeline is a reproduced PDF document. This document contains charts and tables that are numerically and visually identical to those published in the original paper.
 
+🏗️ Pipeline Orchestration
+This research is fully reproducible using Data Version Control (DVC) — an open-source tool for versioning data, experiments, and machine learning pipelines.
+
+Key DVC Files:
+
+⚙️ dvc.yaml: Defines the complete pipeline (stages, dependencies, outputs, commands)
+
+🛠️ params.yaml: Contains all configurable hyperparameters and settings
+
+🔒 dvc.lock: Locks exact versions of data, models, and code for consistency
+
+
 ## Clone 
 - Clone this repository
   ```
@@ -76,6 +88,12 @@ You can either install R/Python dependencies manually or use Anaconda to install
 Project need following  
 - **Python**: version 3.9.10 or higher.
 - **R**: version 3.6 or higher.
+	- install the R packages by running this in your R console:
+	```
+	install.packages(c("tidyverse", "PerformanceAnalytics", "tseries", 
+	                   "psych", "rmarkdown", "kableExtra", 
+	                   "here", "optparse", "ggtext", "latex2exp"))
+	```
 - **DVC**: version 3.10 or higher. Install via 
 ```bash
 pip install dvc
@@ -109,28 +127,26 @@ use **Conda** to create an isolated environment from the provided YAML file.
 	```
 1. **Miktex** same procedure as above for manual installation 
 
-## DVC
-This research is fully reproducible using **[Data Version Control (DVC)](https://dvc.org/)** — an open-source tool for versioning data, models, experiments, and machine learning pipelines.
 
-### Key DVC files
-- `dvc.yaml` — defines the complete pipeline (stages, dependencies, outputs, commands)
-- `params.yaml` — contains all configurable hyperparameters and settings
-- `dvc.lock` — locks exact versions of data, models, metrics, and code outputs
+## How to Reproduce Results
+Results from the paper can be fully reproduced as a PDF containing all original tables and charts. Follow this procedure:
 
-## How to reproduce results presented in the paper
-Results of research presented in the paper could be reproduced in form PDF containing tables and charts. Follow procdure:
-- Open **Anaconda Prompt**
-- Activate environment `wf_optim` (or your name if you changed it) created in prerequistits
-  ```
-  conda activate wf_optim
-  ```
-- Navigate to folder where repository was cloned `wf_optim_crypto_analysis`
-- If both cloned projects folders are located in the same folder, you can skip that step. If folders has different location change `WF_CRYPTO_REPO` path inside `config.r` pointing to location of  `wf_optim_crypto`. 
-- In order to populate **data** folder follow the instruction from [Data Acquisition](#data-acquisition)
-- Execute dvc pipeline where all execution will be performed:
-  ```
-  dvc repro --force
-  ```
-- When execution finished 
-	- open file in the `output\wf_optim_crypto_charts_table.pdf` , file contains all charts and tables from research
-	- output folder contains also intermediate data in form or `*.rds` files used for generating the content 
+- 🐍 Open Anaconda Prompt: Activate the environment created in the prerequisites:
+
+```
+conda activate wf_optim
+```
+- 📂 Navigate: Go to your cloned repository folder wf_optim_crypto_analysis.
+
+- ⚙️ Configure Path: If both cloned projects are in the same parent folder, skip this. Otherwise, update the WF_CRYPTO_REPO path inside config.r to point to your wf_optim_crypto location.
+
+- 📥 Data Acquisition: Populate the data folder by following the instructions in the Data Acquisition section.
+
+- 🏗️ Execute Pipeline: Run the DVC pipeline to perform all calculations:
+
+```
+dvc repro --force
+```
+📊 Review Results: Once execution finishes:
+- Open output\wf_optim_crypto_charts_table.pdf for the final tables and charts.
+- The output/ folder also contains intermediate data in *.rds format.
