@@ -86,7 +86,7 @@ Results of research presented in the paper could be reproduced in form PDF conta
   conda activate wf_optim
   ```
 - Navigate to folder where repository was cloned `wf_optim_crypto_analysis`
-- If both cloned projects folders are located in the same folder, you can skip that step. If folders has different location change `WF_CRYPTO_REPO` path inside `config.r` where  `wf_optim_crypto` is located. 
+- If both cloned projects folders are located in the same folder, you can skip that step. If folders has different location change `WF_CRYPTO_REPO` path inside `config.r` pointing to location of  `wf_optim_crypto`. 
 - Download data from https://drive.google.com/drive/folders/1HAYX3iUfO5ewWXlWK0MbOAu9HQ4l6Zzr
 	- **Note**: Alternatively  you can generate all data by yourself using wf_optim_crypto, this will perform walk forward analysis.
 - Unzip downloaded file into data folder, make sure that data folder has structure as zip 
