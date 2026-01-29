@@ -1,22 +1,22 @@
 ﻿# A novel approach to trading strategy parameter optimization, using double out-of-sample data and walk-forward techniques on cryptocurrency market 
-
-
-## Overview
-This repository contains code to reproduce research results (tables,charts) contained  in the paper "A novel approach to trading strategy parameter optimization,
-using double out-of-sample data and walk-forward techniques on cryptocurrency market" 
-
-
-
-
-
-
 authors :
 - Tomasz Mroziewicz  ORCID: https://orcid.org/0009-0003-6540-6554, email: t.mroziewic2@student.uw.edu.pl
 - Robert Ślepaczuk   ORCID: https://orcid.org/0000-0001-5227-2014, corresponding author: rslepaczuk@wne.uw.edu.pl 
 
+
+## Overview
+This repository reproduces the tables and charts presented in the paper,  trading data generation is handled in a separate project `wf_optim_crypto`.
+All orchestration and of calculations and data flow  is handled using **[Data Version Control (DVC)](https://dvc.org/)** — an open-source tool for versioning data, models, experiments, and machine learning pipelines. 
+Actuall calculations is done in R. Main result produced by this pipeline is PDF with identical charts and tables as in the paper. 
+
+## Data
+There are 2 options for having data which are used by pipeline:
+- easier: download trading data calculated during research from (https://drive.google.com/drive/folders/1HAYX3iUfO5ewWXlWK0MbOAu9HQ4l6Zzr) and copy it to `wf_optim_crypto_analysis\data`
+- more difficult: reproduced by using another project `wf_optim_crypto` and then copy it to `wf_optim_crypto_analysis\data`
+
 ## Repository Structure
 - **conda_env/wf_optim_conda.yaml**: configuration file for creating the Anaconda environment
-- **data/**: empty in git, but it should contains results of the walk-forward optimization; data can be regenerated using the DVC project in `wf_optim_crypto`, or downloaded from Google Drive link below
+- **data/**: empty in git, but it should contains results of the walk-forward optimization; data can be regenerated using the DVC project in `wf_optim_crypto`, or downloaded from Google Drive (link above) 
 - **output/**: all generated data stored as `.rds` files and the final PDF
 - **reports/**: scripts for generating the final PDF
 - **scripts/**: R scripts used by DVC pipeline
@@ -72,6 +72,11 @@ This research is fully reproducible using **[Data Version Control (DVC)](https:/
 
 ## How to reproduce results presented in the paper
 Results of research presented in the paper could be reproduced in form PDF containing tables and charts. Follow procdure:
+- Open **Anaconda Prompt**
+- Activate environment `wf_optim` (or your name if you changed it) created in prerequistits
+  ```
+  conda activate wf_optim
+  ```
 - Clone this repository
   ```
   git clone https://github.com/tmroziewicz/wf_optim_crypto_analysis wf_optim_crypto_analysis
@@ -80,8 +85,8 @@ Results of research presented in the paper could be reproduced in form PDF conta
   ```
   git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
   ```
-- Navigate to repository cd wf_optim_crypto_analysis
-- Configure `WF_CRYPTO_REPO` path inside `config.r` where  wf_optim_crypto is located
+- Navigate to folder where repository was cloned `wf_optim_crypto_analysis`
+- If both cloned projects folders are located in the same folder, you can skip that step. If folders has different location change `WF_CRYPTO_REPO` path inside `config.r` where  `wf_optim_crypto` is located. 
 - Download data from https://drive.google.com/drive/folders/1HAYX3iUfO5ewWXlWK0MbOAu9HQ4l6Zzr
 	- **Note**: Alternatively  you can generate all data by yourself using wf_optim_crypto, this will perform walk forward analysis.
 - Unzip downloaded file into data folder, make sure that data folder has structure as zip 
