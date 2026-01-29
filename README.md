@@ -44,8 +44,9 @@ Project need following
 ```bash
 pip install dvc
 ```
-- **Miktex**: required for PDF output (`pdflatex`); a standalone installation is required, as the MiKTeX package distributed via Anaconda is not compatible with this project.
-	- During Miktex installation choose  following options 
+- **Miktex**:  required for PDF output (`pdflatex`); a standalone installation is required, as the MiKTeX package distributed via Anaconda is not compatible with this project.
+	- Download https://miktex.org/download
+ 	- During Miktex installation choose  following options 
 		- Install for all users 
 		- Enable Install missing packages on-the-fly 
 
@@ -53,10 +54,12 @@ pip install dvc
 To ensure everyone gets the **exact same versions** of Python, libraries, and dependencies (critical for reproducing research results), 
 use **Conda** to create an isolated environment from the provided YAML file.
 
-1. **Download and install Miniconda**:
-2. **Create the project environment inside Anaconda Prompt***
+1. **Download and install Miniconda**
+- Download https://www.anaconda.com/download/success
+- Follow the installation instruction https://www.anaconda.com/docs/getting-started/miniconda/install#windows-installation
+3. **Create the project environment inside Anaconda Prompt***
 - Open **Anaconda Prompt**
-- Navigate to `wf_optim_crypto_analysis\conda_env` (If you want to change the environment name, edit the file wf_optim_conda.yaml before creating the environment.)
+- Navigate to `wf_optim_crypto_analysis\conda_env` where **Anaconda** yaml file defining environmnent and packages  (If you want to change the environment name, edit the file wf_optim_conda.yaml before creating the environment.)
 - Run the following command:
 
 ```bash
