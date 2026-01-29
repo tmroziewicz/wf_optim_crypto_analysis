@@ -126,13 +126,11 @@ Results of research presented in the paper could be reproduced in form PDF conta
   ```
 - Navigate to folder where repository was cloned `wf_optim_crypto_analysis`
 - If both cloned projects folders are located in the same folder, you can skip that step. If folders has different location change `WF_CRYPTO_REPO` path inside `config.r` pointing to location of  `wf_optim_crypto`. 
-- In order to populate **data** folder follow the instruction from [Read more in Data Acquisition](#data-acquisition)
-	- **Note**: Alternatively  you can generate all data by yourself using wf_optim_crypto, this will perform walk forward analysis.
-- Unzip downloaded file into data folder, make sure that data folder has structure as zip 
+- In order to populate **data** folder follow the instruction from [Data Acquisition](#data-acquisition)
 - Execute dvc pipeline where all execution will be performed:
   ```
   dvc repro --force
   ```
-- When command finished 
+- When execution finished 
 	- open file in the `output\wf_optim_crypto_charts_table.pdf` , file contains all charts and tables from research
 	- output folder contains also intermediate data in form or `*.rds` files used for generating the content 
