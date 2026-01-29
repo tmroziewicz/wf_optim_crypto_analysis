@@ -28,6 +28,27 @@ The primary result of this pipeline is a reproduced PDF document. This document 
   ```
   git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
   ```
+
+  
+## Repository Structure
+- 🐍 conda_env/wf_optim_conda.yaml: Configuration file for creating the Anaconda environment
+
+- 📥 data/: Empty in Git; populate via Google Drive or the wf_optim_crypto project
+
+- 📤 output/: Stores generated .rds files and the final PDF report
+
+- 📊 reports/: R Markdown scripts for generating the final PDF
+
+- 📜 scripts/: R scripts executed by the DVC pipeline
+
+- ⚙️ config.r: Defines the local path to the wf_optim_crypto project
+
+- 🏗️ dvc.yaml: Defines all automated data processing stages
+
+- 🛠️ params.yaml: Defines all parameters used by the DVC pipeline
+
+- 📖 README.md: Project documentation and setup guide
+  
 ## Data Acquisition
 To run this pipeline, you need the underlying trading data located in the wf_optim_crypto_analysis\data directory. You can obtain this data using one of two methods:
 
@@ -47,17 +68,6 @@ To run this pipeline, you need the underlying trading data located in the wf_opt
 
 - Transfer the resulting output files to: wf_optim_crypto_analysis\data
 
-  
-## Repository Structure
-- **conda_env/wf_optim_conda.yaml**: configuration file for creating the Anaconda environment
-- **data/**: empty in git, but it should contains results of the walk-forward optimization; data can be regenerated using the DVC project in `wf_optim_crypto`, or downloaded from Google Drive (link above) 
-- **output/**: all generated data stored as `.rds` files and the final PDF
-- **reports/**: scripts for generating the final PDF
-- **scripts/**: R scripts used by DVC pipeline
-- **config.r**: contains the path to another project `wf_optim_crypto`
-- **dvc.yaml**: defines all data processing steps
-- **params.yaml**: defines all parameters used by `dvc.yaml`
-- **README.md**: this file
 
 ## Prerequisite 
 You can either install R/Python dependencies manually or use Anaconda to install all prerequisites at once.
