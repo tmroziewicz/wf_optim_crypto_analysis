@@ -91,23 +91,23 @@ To ensure everyone gets the **exact same versions** of Python, libraries, and de
 use **Conda** to create an isolated environment from the provided YAML file.
 
 1. **Download and install Miniconda**
-- Download https://www.anaconda.com/download/success
-- Follow the installation instruction https://www.anaconda.com/docs/getting-started/miniconda/install#windows-installation
-3. **Create the project environment inside Anaconda Prompt***
-- Open **Anaconda Prompt**
-- Navigate to `wf_optim_crypto_analysis\conda_env` where **Anaconda** yaml file defining environmnent and packages  (If you want to change the environment name, edit the file wf_optim_conda.yaml before creating the environment.)
-- Run the following command:
-
-```bash
-conda env create -f wf_optim_conda.yaml
-```
-After the environment is created, verify that it can be activated.
-If you changed the environment name in the YAML file, replace `wf_optim` with the new name:
-
-```bash
-conda activate wf_optim
-```
-3. **Miktex** same procedure as above for manual installation 
+	- Download https://www.anaconda.com/download/success
+	- Follow the installation instruction https://www.anaconda.com/docs/getting-started/miniconda/install#windows-installation
+1. **Create the project environment inside Anaconda Prompt***
+	- Open **Anaconda Prompt**
+	- Navigate to `wf_optim_crypto_analysis\conda_env` where **Anaconda** yaml file defining environmnent and packages  (If you want to change the environment name, edit the file wf_optim_conda.yaml before creating the environment.)
+	- Run the following command:
+	
+	```bash
+	conda env create -f wf_optim_conda.yaml
+	```
+1. After the environment is created, verify that it can be activated.
+	If you changed the environment name in the YAML file, replace `wf_optim` with the new name:
+	
+	```bash
+	conda activate wf_optim
+	```
+1. **Miktex** same procedure as above for manual installation 
 
 ## DVC
 This research is fully reproducible using **[Data Version Control (DVC)](https://dvc.org/)** — an open-source tool for versioning data, models, experiments, and machine learning pipelines.
@@ -126,7 +126,7 @@ Results of research presented in the paper could be reproduced in form PDF conta
   ```
 - Navigate to folder where repository was cloned `wf_optim_crypto_analysis`
 - If both cloned projects folders are located in the same folder, you can skip that step. If folders has different location change `WF_CRYPTO_REPO` path inside `config.r` pointing to location of  `wf_optim_crypto`. 
-- Download data from https://drive.google.com/drive/folders/1HAYX3iUfO5ewWXlWK0MbOAu9HQ4l6Zzr
+- In order to populate **data** folder follow the instruction from [Read more in Data Acquisition](#data-acquisition)
 	- **Note**: Alternatively  you can generate all data by yourself using wf_optim_crypto, this will perform walk forward analysis.
 - Unzip downloaded file into data folder, make sure that data folder has structure as zip 
 - Execute dvc pipeline where all execution will be performed:
