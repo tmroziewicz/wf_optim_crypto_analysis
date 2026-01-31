@@ -32,11 +32,11 @@ Key DVC Files:
 
 
 ## Clone 
-- Clone this repository
+- Clone this repository:
   ```
   git clone https://github.com/tmroziewicz/wf_optim_crypto_analysis wf_optim_crypto_analysis
   ```
-- Clone depended repositor
+- Clone depended repository:
   ```
   git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
   ```
