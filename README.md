@@ -111,25 +111,25 @@ use **Conda** to create an isolated environment from the provided YAML file.
 1. **Download and install Miniconda**
 	- Download https://www.anaconda.com/download/success
 	- Follow the installation instruction https://www.anaconda.com/docs/getting-started/miniconda/install#windows-installation
-1. **Create the project environment inside Anaconda Prompt***
+1. **Create the project environment*
 	- Open **Anaconda Prompt**
-	- Navigate to `wf_optim_crypto_analysis\conda_env` where **Anaconda** yaml file defining environmnent and packages  (If you want to change the environment name, edit the file wf_optim_conda.yaml before creating the environment.)
+	- Navigate to `wf_optim_crypto_analysis\conda_env` where **Anaconda** yaml file is located defining environmnent and packages  (If you want to change the environment name, edit the file wf_optim_conda.yaml before creating the environment.)
 	- Run the following command:
 	
 	```bash
 	conda env create -f wf_optim_conda.yaml
 	```
-1. After the environment is created, verify that it can be activated.
+2. After the environment is created, verify that it can be activated.
 	If you changed the environment name in the YAML file, replace `wf_optim` with the new name:
 	
 	```bash
 	conda activate wf_optim
 	```
-1. **Miktex** same procedure as above for manual installation 
+3. **Miktex** same procedure as above for manual installation 
 
 
 ## How to Reproduce Results
-Results from the paper can be fully reproduced as a PDF containing all original tables and charts. Follow this procedure:
+Results from the paper can be reproduced as a PDF containing all original tables and charts. Follow this procedure:
 
 - 🐍 Open Anaconda Prompt: (Skip this if you chose manual installation). Activate the environment created in the prerequisites:
 
