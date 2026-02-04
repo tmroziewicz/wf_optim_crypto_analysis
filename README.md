@@ -67,7 +67,7 @@ To run this pipeline, you need the underlying trading data located in the wf_opt
 **Option 1**: Direct Download (Recommended)
 - This is the fastest way to get started using the exact datasets used in the original research.
 
-- Download the pre-calculated trading data from this Google Drive Folder.
+- Download the pre-calculated trading data from this [wf_optim_crypto_analysis.zip](https://drive.google.com/file/d/1y7J3cGFEYYBufVTACzPYr4GXiUSCOKm7/view?usp=drive_link) (76 MB) stored on  Google Drive .
 
 - Extract/Copy the files into the following directory: wf_optim_crypto_analysis\data
 
@@ -99,7 +99,7 @@ Project need following
 pip install dvc
 ```
 - **Miktex**:  required for PDF output (`pdflatex`); a standalone installation is required, as the MiKTeX package distributed via Anaconda is not compatible with this project.
-	- Download https://miktex.org/download
+	- Download [Miktex](https://miktex.org/download)
  	- During Miktex installation choose  following options 
 		- Install for all users 
 		- Enable Install missing packages on-the-fly 
@@ -109,8 +109,8 @@ To ensure everyone gets the **exact same versions** of Python, libraries, and de
 use **Conda** to create an isolated environment from the provided YAML file.
 
 1. **Download and install Miniconda**
-	- Download https://www.anaconda.com/download/success
-	- Follow the installation instruction https://www.anaconda.com/docs/getting-started/miniconda/install#windows-installation
+	- Download [Anaconda Mini](https://www.anaconda.com/download/success)
+	- Follow the installation instruction [Anaconda Installation](https://www.anaconda.com/docs/getting-started/miniconda/install#windows-installation)
 1. **Create the project environment*
 	- Open **Anaconda Prompt**
 	- Navigate to `wf_optim_crypto_analysis\conda_env` where **Anaconda** yaml file is located defining environmnent and packages  (If you want to change the environment name, edit the file wf_optim_conda.yaml before creating the environment.)
@@ -140,7 +140,7 @@ conda activate wf_optim
 
 - ⚙️ Configure Path: If both cloned projects are in the same parent folder, skip this. Otherwise, update the WF_CRYPTO_REPO path inside config.r to point to your wf_optim_crypto location.
 
-- 📥 Data Acquisition: Populate the data folder by following the instructions in the Data Acquisition section.
+- 📥 Data Acquisition: Populate the data folder by following the instructions in the [Data Acquisition](https://github.com/tmroziewicz/wf_optim_crypto_analysis/edit/master/README.md#data-acquisition) section.
 
 - 🏗️ Execute Pipeline: Run the DVC pipeline to perform all calculations:
 
