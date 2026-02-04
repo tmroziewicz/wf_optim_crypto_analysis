@@ -82,7 +82,7 @@ To run this pipeline, you need the underlying trading data located in the wf_opt
 
 - Transfer the resulting output files to: `wf_optim_crypto_analysis\data`
 
-- More information about data generation and exporting can be found in the associated repository [Exporting Guide](https://github.com/tmroziewicz/wf_optim_crypto/blob/main/README.md#export-guide) 
+- More information about data generation and exporting can be found in the associated repository [Export Guide](https://github.com/tmroziewicz/wf_optim_crypto/blob/main/README.md#export-guide) 
 
 ## Prerequisite 
 You can either install R/Python dependencies manually or use Anaconda to install all prerequisites at once.
