@@ -101,7 +101,7 @@ Project need following
 ```bash
 pip install dvc
 ```
-- **Miktex**:  required for PDF output (`pdflatex`) a standalone installation is required, as the MiKTeX package distributed via Anaconda is not compatible with this project.
+- **Miktex**:  required for PDF output (`pdflatex`) a standalone installation is required.
 	- Download [Miktex](https://miktex.org/download)
  	- During Miktex installation choose  following options 
 		- Install for all users 
@@ -128,7 +128,7 @@ use **Conda** to create an isolated environment from the provided YAML file.
 	```bash
 	conda activate wf_optim
 	```
-3. **Miktex** same procedure as above for manual installation 
+3. **Miktex** same procedure as above for manual installation. MiKTeX package distributed via Anaconda is not compatible with this project.
 
 
 ## How to Reproduce Results
