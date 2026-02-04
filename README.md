@@ -65,6 +65,7 @@ Key DVC Files:
 To run this pipeline, you need the underlying trading data located in the wf_optim_crypto_analysis\data directory. You can obtain this data using one of two methods:
 
 **Option 1**: Direct Download (Recommended)
+
 - This is the fastest way to get started using the exact datasets used in the original research.
 
 - Download the pre-calculated trading data from this [wf_optim_crypto_analysis.zip](https://drive.google.com/file/d/1y7J3cGFEYYBufVTACzPYr4GXiUSCOKm7/view?usp=drive_link) (76 MB) stored on  Google Drive .
@@ -72,14 +73,16 @@ To run this pipeline, you need the underlying trading data located in the wf_opt
 - Extract/Copy the files into the following directory: wf_optim_crypto_analysis\data
 
 **Option 2**: Full Reproduction
+
 - Choose this option if you wish to audit the data generation process or modify the underlying trading logic.
 
 - Clone and run the wf_optim_crypto repository.
 
 - Generate the datasets according to that project's instructions.
 
-- Transfer the resulting output files to: wf_optim_crypto_analysis\data
+- Transfer the resulting output files to: `wf_optim_crypto_analysis\data`
 
+- More information about data generation and exporting can be found in the associated repository [Exporting Guide](https://github.com/tmroziewicz/wf_optim_crypto/blob/main/README.md#export-guide) 
 
 ## Prerequisite 
 You can either install R/Python dependencies manually or use Anaconda to install all prerequisites at once.
@@ -98,13 +101,13 @@ Project need following
 ```bash
 pip install dvc
 ```
-- **Miktex**:  required for PDF output (`pdflatex`); a standalone installation is required, as the MiKTeX package distributed via Anaconda is not compatible with this project.
+- **Miktex**:  required for PDF output (`pdflatex`) a standalone installation is required, as the MiKTeX package distributed via Anaconda is not compatible with this project.
 	- Download [Miktex](https://miktex.org/download)
  	- During Miktex installation choose  following options 
 		- Install for all users 
 		- Enable Install missing packages on-the-fly 
 
-### Option 2 - Package manager installation - Conda Environment Setup
+### Option 2 - Package manager installation - Anaconda Environment Setup
 To ensure everyone gets the **exact same versions** of Python, libraries, and dependencies (critical for reproducing research results), 
 use **Conda** to create an isolated environment from the provided YAML file.
 
