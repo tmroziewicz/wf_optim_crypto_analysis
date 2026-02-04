@@ -45,13 +45,13 @@ Key DVC Files:
 ## Repository Structure
 - 🐍 conda_env/wf_optim_conda.yaml: Configuration file for creating the Anaconda environment
 
-- 📥 data/: Empty in Git; populate via Google Drive or the wf_optim_crypto project
+- 📥 data: Empty in Git; populate via Google Drive or the wf_optim_crypto project
 
-- 📤 output/: Stores generated .rds files and the final PDF report
+- 📤 output: Stores generated .rds files and the final PDF report
 
-- 📊 reports/: R Markdown scripts for generating the final PDF
+- 📊 reports: R Markdown scripts for generating the final PDF
 
-- 📜 scripts/: R scripts executed by the DVC pipeline
+- 📜 scripts: R scripts executed by the DVC pipeline
 
 - ⚙️ config.r: Defines the local path to the wf_optim_crypto project
 
