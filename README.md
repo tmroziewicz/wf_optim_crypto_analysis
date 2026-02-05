@@ -10,7 +10,7 @@ This repository contains the reproduction code for the tables and charts present
 🛠 System Architecture
 The project relies on a modular setup where data generation and data processing are decoupled:
 
-- Upstream Data: Trading data generation is managed in the external wf_optim_crypto project.
+- Upstream Data: Trading data generation is managed in the external [wf_optim_crypto](https://github.com/tmroziewicz/wf_optim_crypto) project.
 
 - Orchestration: We use Data Version Control (DVC) to manage the data flow, calculation dependencies, and experiment versioning.
 
@@ -21,8 +21,6 @@ The primary result of this pipeline is a reproduced PDF document. This document 
 
 🏗️ Pipeline Orchestration
 This research is fully reproducible using Data Version Control (DVC) — an open-source tool for versioning data, experiments, and machine learning pipelines.
-
-
   
 ## Repository Structure
 - 🐍 conda_env/wf_optim_conda.yaml: Configuration file for creating the Anaconda environment
@@ -44,7 +42,7 @@ This research is fully reproducible using Data Version Control (DVC) — an open
 - 📖 README.md: Project documentation and setup guide
   
 ## Data Acquisition
-To run this pipeline, you need the underlying trading data located in the wf_optim_crypto_analysis\data directory. You can obtain this data using one of two methods:
+To run this pipeline, you need the underlying trading data located in the `wf_optim_crypto_analysis\data` directory. You can obtain this data using one of two methods:
 
 **Option 1**: Direct Download (Recommended)
 
@@ -67,7 +65,7 @@ To run this pipeline, you need the underlying trading data located in the wf_opt
 - More information about data generation and exporting can be found in the associated repository [Export Guide](https://github.com/tmroziewicz/wf_optim_crypto/blob/main/README.md#export-guide) 
 
 ## Prerequisite 
-You can either install R/Python dependencies manually or use Anaconda to install all prerequisites at once.
+You can either install R/Python dependencies manually or use Anaconda to install prerequisites at once.
 
 ### Option 1 - Manual installation 
 Project need following  
@@ -80,7 +78,7 @@ Project need following
 	                   "here", "optparse", "ggtext", "latex2exp"))
 	```
 - **DVC**: version 3.10 or higher. Install via 
-```bash
+```
 pip install dvc
 ```
 - **Miktex**:  required for PDF output (`pdflatex`) a standalone installation is required.
@@ -91,14 +89,14 @@ pip install dvc
 
 ### Option 2 - Anaconda Environment Setup
 To ensure everyone gets the **exact same versions** of Python, libraries, and dependencies (critical for reproducing research results), 
-use **Conda** to create an isolated environment from the provided YAML file.
+use **Anaconda** to create an isolated environment from the provided YAML file.
 
 1. **Download and install Miniconda**
 	- Download [Anaconda Mini](https://www.anaconda.com/download/success)
 	- Follow the installation instruction [Anaconda Installation](https://www.anaconda.com/docs/getting-started/miniconda/install#windows-installation)
 1. **Create the project environment*
 	- Open **Anaconda Prompt**
-	- Navigate to `wf_optim_crypto_analysis\conda_env` where **Anaconda** yaml file is located defining environmnent and packages  (If you want to change the environment name, edit the file wf_optim_conda.yaml before creating the environment.)
+	- If you have already cloned this repo, navigate to `wf_optim_crypto_analysis\conda_env` where **Anaconda** yaml file is located defining environmnent and packages  (If you want to change the environment name, edit the file wf_optim_conda.yaml before creating the environment.)
 	- Run the following command:
 	
 	```bash
