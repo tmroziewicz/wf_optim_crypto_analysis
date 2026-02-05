@@ -27,9 +27,9 @@ This research is fully reproducible using Data Version Control (DVC) — an open
 ## Repository Structure
 - 🐍 conda_env/wf_optim_conda.yaml: Configuration file for creating the Anaconda environment
 
-- 📥 data: Empty in Git; populate via Google Drive or the wf_optim_crypto project
+- 📂 data: Empty in Git; populate via Google Drive or the wf_optim_crypto project
 
-- 📤 output: Stores generated .rds files and the final PDF report
+- 📂 output: Stores generated .rds files and the final PDF report
 
 - 📊 reports: R Markdown scripts for generating the final PDF
 
@@ -121,12 +121,12 @@ Results from the paper can be reproduced as a PDF containing all original tables
   conda activate wf_optim
   ```
 
-- Clone this repository:
+- :inbox_tray: Clone this repository:
   ```
   git clone https://github.com/tmroziewicz/wf_optim_crypto_analysis wf_optim_crypto_analysis
   ```
 
-- Clone depended repository:
+- :inbox_tray: Clone depended repository:
   ```
   git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
   ```
@@ -135,7 +135,7 @@ Results from the paper can be reproduced as a PDF containing all original tables
 
 - ⚙️ Configure Path: If both cloned projects are in the same parent folder, skip this. Otherwise, update the WF_CRYPTO_REPO path inside config.r to point to your wf_optim_crypto location.
 
-- 📥 Data Acquisition: Populate the data folder by following the instructions in the [Data Acquisition](https://github.com/tmroziewicz/wf_optim_crypto_analysis/edit/master/README.md#data-acquisition) section.
+- :inbox_tray: Data Acquisition: Populate the data folder by following the instructions in the [Data Acquisition](https://github.com/tmroziewicz/wf_optim_crypto_analysis/edit/master/README.md#data-acquisition) section.
 
 - 🏗️ Execute Pipeline: Run the DVC pipeline to perform all calculations:
 
