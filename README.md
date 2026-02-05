@@ -22,24 +22,6 @@ The primary result of this pipeline is a reproduced PDF document. This document 
 🏗️ Pipeline Orchestration
 This research is fully reproducible using Data Version Control (DVC) — an open-source tool for versioning data, experiments, and machine learning pipelines.
 
-Key DVC Files:
-
-⚙️ dvc.yaml: Defines the complete pipeline (stages, dependencies, outputs, commands)
-
-🛠️ params.yaml: Contains all configurable hyperparameters and settings
-
-🔒 dvc.lock: Locks exact versions of data, models, and code for consistency
-
-
-## Clone 
-- Clone this repository:
-  ```
-  git clone https://github.com/tmroziewicz/wf_optim_crypto_analysis wf_optim_crypto_analysis
-  ```
-- Clone depended repository:
-  ```
-  git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
-  ```
 
   
 ## Repository Structure
@@ -76,7 +58,7 @@ To run this pipeline, you need the underlying trading data located in the wf_opt
 
 - Choose this option if you wish to audit the data generation process or modify the underlying trading logic.
 
-- Clone and run the wf_optim_crypto repository.
+- Clone and run the `wf_optim_crypto` repository.
 
 - Generate the datasets according to that project's instructions.
 
@@ -107,7 +89,7 @@ pip install dvc
 		- Install for all users 
 		- Enable Install missing packages on-the-fly 
 
-### Option 2 - Package manager installation - Anaconda Environment Setup
+### Option 2 - Anaconda Environment Setup
 To ensure everyone gets the **exact same versions** of Python, libraries, and dependencies (critical for reproducing research results), 
 use **Conda** to create an isolated environment from the provided YAML file.
 
@@ -135,10 +117,20 @@ use **Conda** to create an isolated environment from the provided YAML file.
 Results from the paper can be reproduced as a PDF containing all original tables and charts. Follow this procedure:
 
 - 🐍 Open Anaconda Prompt: (Skip this if you chose manual installation). Activate the environment created in the prerequisites:
+  ```
+  conda activate wf_optim
+  ```
 
-```
-conda activate wf_optim
-```
+- Clone this repository:
+  ```
+  git clone https://github.com/tmroziewicz/wf_optim_crypto_analysis wf_optim_crypto_analysis
+  ```
+
+- Clone depended repository:
+  ```
+  git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
+  ```
+
 - 📂 Navigate: Go to your cloned repository folder wf_optim_crypto_analysis.
 
 - ⚙️ Configure Path: If both cloned projects are in the same parent folder, skip this. Otherwise, update the WF_CRYPTO_REPO path inside config.r to point to your wf_optim_crypto location.
