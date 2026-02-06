@@ -10,7 +10,7 @@ This repository contains the reproduction code for the tables and charts present
 🛠 System Architecture
 The project relies on a modular setup where data generation and data processing are decoupled:
 
-- Upstream Data: Trading data generation is managed in the external [wf_optim_crypto](https://github.com/tmroziewicz/wf_optim_crypto) project.
+- Upstream Data: Trading data generation is managed in the external [wf_optim_crypto](https://github.com/tmr-crypto/wf_optim_crypto) project.
 
 - Orchestration: We use Data Version Control (DVC) to manage the data flow, calculation dependencies, and experiment versioning.
 
@@ -62,7 +62,7 @@ To run this pipeline, you need the underlying trading data located in the `wf_op
 
 - Transfer the resulting output files to: `wf_optim_crypto_analysis\data`
 
-- More information about data generation and exporting can be found in the associated repository [Export Guide](https://github.com/tmroziewicz/wf_optim_crypto/blob/main/README.md#export-guide) 
+- More information about data generation and exporting can be found in the associated repository [Export Guide](https://github.com/tmr-crypto/wf_optim_crypto/blob/main/README.md#export-guide) 
 
 ## Prerequisite 
 You can either install R/Python dependencies manually or use Anaconda to install prerequisites at once.
@@ -121,19 +121,19 @@ Results from the paper can be reproduced as a PDF containing all original tables
 
 - :inbox_tray: Clone this repository:
   ```
-  git clone https://github.com/tmroziewicz/wf_optim_crypto_analysis wf_optim_crypto_analysis
+  git clone https://github.com/tmr-crypto/wf_optim_crypto_analysis wf_optim_crypto_analysis
   ```
 
 - :inbox_tray: Clone depended repository:
   ```
-  git clone https://github.com/tmroziewicz/wf_optim_crypto wf_optim_crypto
+  git clone https://github.com/tmr-crypto/wf_optim_crypto wf_optim_crypto
   ```
 
 - 📂 Navigate: Go to your cloned repository folder wf_optim_crypto_analysis.
 
 - ⚙️ Configure Path: If both cloned projects are in the same parent folder, skip this. Otherwise, update the WF_CRYPTO_REPO path inside config.r to point to your wf_optim_crypto location.
 
-- :inbox_tray: Data Acquisition: Populate the data folder by following the instructions in the [Data Acquisition](https://github.com/tmroziewicz/wf_optim_crypto_analysis/edit/master/README.md#data-acquisition) section.
+- :inbox_tray: Data Acquisition: Populate the data folder by following the instructions in the [Data Acquisition](https://github.com/tmr-crypto/wf_optim_crypto_analysis/edit/master/README.md#data-acquisition) section.
 
 - 🏗️ Execute Pipeline: Run the DVC pipeline to perform all calculations:
 
