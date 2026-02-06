@@ -8,35 +8,35 @@ general:
   
   input_rmd:                &input_rmd                  reports/wf_optim_crypto_charts_table.rmd
   output_pdf:               &output_pdf                 output/wf_optim_crypto_charts_table.pdf
-  train_strat_1_raw:        &train_strat_1_raw          data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_crash-taka\01_converted_to_xts.rds
-  train_strat_1_result:     &train_strat_1_result       data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_crash-taka\09_wf_test_evalued.rds
-  train_strat_1_metric:     &train_strat_1_metric       data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_crash-taka\metrics.yaml
-  train_strat_1_positions:  &train_strat_1_positions    data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_crash-taka\04_positions.rds
-  train_strat_1_wf_indexes: &train_strat_1_wf_indexes   data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_crash-taka\06_wf_indexes.rds
-  train_strat_2_result:     &train_strat_2_result       data\global_training_period_results\dvc-exps\TRAIN_14_TEST_10_BTC_liney-jass\09_wf_test_evalued.rds
-  train_strat_2_metric:     &train_strat_2_metric       data\global_training_period_results\dvc-exps\TRAIN_14_TEST_10_BTC_liney-jass\metrics.yaml
-  train_strat_2_positions:  &train_strat_2_positions    data\global_training_period_results\dvc-exps\TRAIN_14_TEST_10_BTC_liney-jass\04_positions.rds  
-  train_strat_2_wf_indexes: &train_strat_2_wf_indexes   data\global_training_period_results\dvc-exps\TRAIN_14_TEST_10_BTC_liney-jass\06_wf_indexes.rds
+  train_strat_1_raw:        &train_strat_1_raw          data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC\01_converted_to_xts.rds
+  train_strat_1_result:     &train_strat_1_result       data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC\09_wf_test_evalued.rds
+  train_strat_1_metric:     &train_strat_1_metric       data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC\metrics.yaml
+  train_strat_1_positions:  &train_strat_1_positions    data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC\04_positions.rds
+  train_strat_1_wf_indexes: &train_strat_1_wf_indexes   data\global_training_period_results\dvc-exps\TRAIN_7_TEST_28_BTC\06_wf_indexes.rds
+  train_strat_2_result:     &train_strat_2_result       data\global_training_period_results\dvc-exps\TRAIN_14_TEST_10_BTC\09_wf_test_evalued.rds
+  train_strat_2_metric:     &train_strat_2_metric       data\global_training_period_results\dvc-exps\TRAIN_14_TEST_10_BTC\metrics.yaml
+  train_strat_2_positions:  &train_strat_2_positions    data\global_training_period_results\dvc-exps\TRAIN_14_TEST_10_BTC\04_positions.rds  
+  train_strat_2_wf_indexes: &train_strat_2_wf_indexes   data\global_training_period_results\dvc-exps\TRAIN_14_TEST_10_BTC\06_wf_indexes.rds
   
   train_strat_1_cost_sens: &train_strat_1_cost_sens   output\15_cost_sensitivitiy.rds
   train_strat_1_cost_sens_stats: &train_strat_1_cost_sens_stats   output\15_cost_sensitivitiy_stats.rds
 
 #unseen variable
-  unseen_strat_1_result:  &unseen_strat_1_result     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_ochre-expo\09_wf_test_evalued.rds
-  unseen_strat_2_result:  &unseen_strat_2_result     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BTC_incog-caps\09_wf_test_evalued.rds 
-  unseen_strat_3_result:  &unseen_strat_3_result     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_ETH_crack-torc\09_wf_test_evalued.rds
-  unseen_strat_4_result:  &unseen_strat_4_result     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_ETH_blear-taco\09_wf_test_evalued.rds
-  unseen_strat_5_result:  &unseen_strat_5_result     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_BNB_telic-ions\09_wf_test_evalued.rds
-  unseen_strat_6_result:  &unseen_strat_6_result     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BNB_varus-puck\09_wf_test_evalued.rds
+  unseen_strat_1_result:  &unseen_strat_1_result     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_BTC\09_wf_test_evalued.rds
+  unseen_strat_2_result:  &unseen_strat_2_result     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BTC\09_wf_test_evalued.rds 
+  unseen_strat_3_result:  &unseen_strat_3_result     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_ETH\09_wf_test_evalued.rds
+  unseen_strat_4_result:  &unseen_strat_4_result     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_ETH\09_wf_test_evalued.rds
+  unseen_strat_5_result:  &unseen_strat_5_result     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_BNB\09_wf_test_evalued.rds
+  unseen_strat_6_result:  &unseen_strat_6_result     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BNB\09_wf_test_evalued.rds
 
 
 
-  unseen_strat_1_metric:  &unseen_strat_1_metric     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_BTC_ochre-expo\metrics.yaml
-  unseen_strat_2_metric:  &unseen_strat_2_metric     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BTC_incog-caps\metrics.yaml 
-  unseen_strat_3_metric:  &unseen_strat_3_metric     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_ETH_crack-torc\metrics.yaml
-  unseen_strat_4_metric:  &unseen_strat_4_metric     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_ETH_blear-taco\metrics.yaml
-  unseen_strat_5_metric:  &unseen_strat_5_metric     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_BNB_telic-ions\metrics.yaml
-  unseen_strat_6_metric:  &unseen_strat_6_metric     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BNB_varus-puck\metrics.yaml
+  unseen_strat_1_metric:  &unseen_strat_1_metric     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_BTC\metrics.yaml
+  unseen_strat_2_metric:  &unseen_strat_2_metric     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BTC\metrics.yaml 
+  unseen_strat_3_metric:  &unseen_strat_3_metric     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_ETH\metrics.yaml
+  unseen_strat_4_metric:  &unseen_strat_4_metric     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_ETH\metrics.yaml
+  unseen_strat_5_metric:  &unseen_strat_5_metric     data\unseen_period_results\dvc-exps\TRAIN_7_TEST_28_BNB\metrics.yaml
+  unseen_strat_6_metric:  &unseen_strat_6_metric     data\unseen_period_results\dvc-exps\TRAIN_14_TEST_10_BNB\metrics.yaml
 
   unseen_strat_1_eq_curve: &unseen_strat_1_eq_curve     output\11_01_BTC_7_28_equity_curve_xts.rds
   unseen_strat_2_eq_curve: &unseen_strat_2_eq_curve     output\11_02_BTC_14_10_equity_curve_xts.rds
