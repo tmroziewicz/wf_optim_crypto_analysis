@@ -133,7 +133,7 @@ Results from the paper can be reproduced as a PDF containing all original tables
 
 - ⚙️ Configure Path: If both cloned projects are in the same parent folder, skip this. Otherwise, update the WF_CRYPTO_REPO path inside config.r to point to your wf_optim_crypto location.
 
-- :inbox_tray: Data Acquisition: Populate the data folder by following the instructions in the [Data Acquisition](data-acquisition) section.
+- :inbox_tray: Data Acquisition: Populate the data folder by following the instructions in the [Data Acquisition](#data-acquisition) section.
 
 - 🏗️ Execute Pipeline: Run the DVC pipeline to perform all calculations:
 
