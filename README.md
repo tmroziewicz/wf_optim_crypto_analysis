@@ -4,8 +4,9 @@
 # Walk-Forward Crypto Optimization - A novel approach to trading strategy parameter optimization, using double out-of-sample data and walk-forward techniques on cryptocurrency market  📈
 ### High-performance backtesting and data pipeline orchestration.
 
-![R](https://img.shields.io/badge/r-%23276DC3.svg?style=for-the-badge&logo=r&logoColor=white)
+
 ![DVC](https://img.shields.io/badge/DVC-945DDB?style=flat-square&logo=data-version-control&logoColor=white)
+![R](https://img.shields.io/badge/R-276DC3?style=flat-square&logo=r&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.9+-blue?style=flat-square&logo=python)
 ![Conda](https://img.shields.io/badge/Conda-Managed-green?style=flat-square&logo=anaconda)
 
@@ -106,9 +107,9 @@ Project need following
 	                   "here", "optparse", "ggtext", "latex2exp"))
 	```
 - **DVC**: version 3.10 or higher. Install via 
-```
-pip install dvc
-```
+	```
+	pip install dvc
+	```
 - **Miktex**:  required for PDF output (`pdflatex`) a standalone installation is required.
 	- Download [Miktex](https://miktex.org/download)
  	- During Miktex installation choose  following options 
