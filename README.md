@@ -82,7 +82,7 @@ To run this pipeline, you need the underlying trading data located in the `wf_op
 
 - This is the fastest way to get started using the exact datasets used in the original research.
 
-- Download the pre-calculated trading data from this [wf_optim_crypto_analysis.zip](https://drive.google.com/file/d/1y7J3cGFEYYBufVTACzPYr4GXiUSCOKm7/view?usp=drive_link) (76 MB) stored on  Google Drive .
+- Download the pre-calculated trading data from this [wf_optim_crypto_analysis.zip](https://drive.google.com/file/d/1y7J3cGFEYYBufVTACzPYr4GXiUSCOKm7/view?usp=drive_link) (76 MB) stored on  Google Drive.
 
 - Transfer the content of unzipped wf_optim_crypto_analysis folder to: wf_optim_crypto_analysis\data
 
