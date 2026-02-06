@@ -1,7 +1,7 @@
 
 <div align="center">
 
-# Walk-Forward Crypto Optimization - A novel approach to trading strategy parameter optimization, using double out-of-sample data and walk-forward techniques on cryptocurrency market  📈
+# Walk-Forward Crypto Optimization - A novel approach to trading strategy parameter optimization, using double out-of-sample data and walk-forward techniques 📈
 ### High-performance backtesting and data pipeline orchestration.
 
 
