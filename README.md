@@ -20,6 +20,7 @@ authors :
 
 
 ## Abstract 
+<div align="justify">
 This study introduces a novel approach to walk-forward optimization by parameterizing the
 lengths of training and testing windows. We demonstrate that the performance of a trading
 strategy using the Exponential Moving Average (EMA) evaluated within a walk-forward procedure
@@ -33,6 +34,7 @@ Similar results were observed for Binance Coin and Ethereum. The real strength w
 when a portfolio combining Buy-and-Hold with our strategies outperformed all individual
 strategies and Buy-and-Hold alone, achieving the highest overall performance and a 50%
 reduction in drawdown. A conservative fee of 0.1\% per transaction was included in all calculations. A cost sensitivity analysis was performed as a sanity check, revealing that the strategy's break-even point was around 0.4\% per transaction. This research highlights the importance of optimizing walk-forward window lengths and emphasizing the value of single-time out-of-sample testing for reliable strategy evaluation.
+</div>
 &nbsp;
 <table style="width: 100%; border-collapse: collapse; border: solid;">
   <tr>
