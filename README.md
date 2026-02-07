@@ -87,28 +87,6 @@ This research is fully reproducible using Data Version Control (DVC) — an open
 
 - 📖 README.md: Project documentation and setup guide
   
-## Data Acquisition
-To run this pipeline, you need the underlying trading data located in the `wf_optim_crypto_analysis\data` directory. You can obtain this data using one of two methods:
-
-**Option 1**: Direct Download (Recommended)
-
-- This is the fastest way to get started using the exact datasets used in the original research.
-
-- Download the pre-calculated trading data from this [wf_optim_crypto_analysis.zip](https://drive.google.com/file/d/1y7J3cGFEYYBufVTACzPYr4GXiUSCOKm7/view?usp=drive_link) (76 MB) stored on  Google Drive.
-
-- Transfer the content of unzipped wf_optim_crypto_analysis folder to: wf_optim_crypto_analysis\data
-
-**Option 2**: Full Reproduction
-
-- Choose this option if you wish to audit the data generation process or modify the underlying trading logic.
-
-- Clone and run the `wf_optim_crypto` repository.
-
-- Generate the datasets according to that project's instructions.
-
-- Transfer the resulting output files to: `wf_optim_crypto_analysis\data`
-
-- More information about data generation and exporting can be found in the associated repository [Export Guide](https://github.com/tmr-crypto/wf_optim_crypto#export-guide) 
 
 ## Prerequisite 
 You can either install R/Python dependencies manually or use Anaconda to install prerequisites at once.
@@ -189,3 +167,29 @@ dvc repro --force
 📊 Review Results: Once execution finishes:
 - Open output\wf_optim_crypto_charts_table.pdf for the final tables and charts.
 - The output/ folder also contains intermediate data in *.rds format.
+
+## Data Acquisition
+To run this pipeline, you need the underlying trading data located in the `wf_optim_crypto_analysis\data` directory. You can obtain this data using one of two methods:
+
+**Option 1**: Direct Download (Recommended)
+
+- This is the fastest way to get started using the exact datasets used in the original research.
+
+- Download the pre-calculated trading data from this [wf_optim_crypto_analysis.zip](https://drive.google.com/file/d/1y7J3cGFEYYBufVTACzPYr4GXiUSCOKm7/view?usp=drive_link) (76 MB) stored on  Google Drive.
+
+- Transfer the content of unzipped wf_optim_crypto_analysis folder to: wf_optim_crypto_analysis\data
+
+**Option 2**: Full Reproduction
+
+- Choose this option if you wish to audit the data generation process or modify the underlying trading logic.
+
+- Clone and run the `wf_optim_crypto` repository.
+
+- Generate the datasets according to that project's instructions.
+
+- Transfer the resulting output files to: `wf_optim_crypto_analysis\data`
+
+- More information about data generation and exporting can be found in the associated repository [Export Guide](https://github.com/tmr-crypto/wf_optim_crypto#export-guide)
+  
+[Back To Reproducing](#how-to-reproduce-results)
+
